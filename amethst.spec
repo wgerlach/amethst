@@ -1,3 +1,4 @@
 module AMETHSTService {
-    funcdef amethst(string matrix, string cmd_pairs) returns (string job_id);
+    # last parameter "tree" is optional
+    funcdef amethst(string abundance_matrix, string groups_list, string commands_list, string tree) returns (string job_id);
 };
