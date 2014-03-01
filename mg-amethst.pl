@@ -25,6 +25,47 @@ my $shocktoken=$ENV{'GLOBUSONLINE'} || $ENV{'KB_AUTH_TOKEN'};
 
 ##############################################
 
+my ($h, $help_text) = &parse_options (
+'name' => 'mg-amethst -- wrapper for amethst',
+'version' => '1',
+'synopsis' => 'mg-amethst -i <input> -o <output>',
+'examples' => 'ls',
+'authors' => 'Wolfgang Gerlach',
+'options' => [
+[ 'matrix|m=s', "abundance matrix"],
+[ 'groups|g=s',  "groups file" ],
+[ 'commands|c=s',  "command file" ],
+[ 'tree|t=s',  "tree (optional)" ],
+[ 'output|o=s', "out" ],
+[ 'nowait|n',   "asynchronous call" ],
+[ 'help|h', "", { hidden => 1  }]
+]
+);
+
+
+
+if ($h->{'help'} || keys(%$h)==0) {
+	print $help_text;
+	exit(0);
+}
+
+print "Configuration:\n";
+print "aweserverurl: ".($aweserverurl || 'undef') ."\n";
+print "shockurl: ". ($shockurl || 'undef') ."\n";
+print "clientgroup: ". ($clientgroup || 'undef') ."\n\n";
+
+#$h->{'input'} || die "no input defined";
+#$h->{'output'} || die "no output defined";
+
+$h->{'cmdfile'} || die "no cmdfile defined";
+
+
+
+#abundance_matrix, $groups_list, $commands_list, $tree
+AMETHSTAWE::amethst_main($h->{'matrix'}, $h->{'groups'},$h->{'commands'}, ,$h->{'tree'});
+
+
+
 
 print "job submitted: $job_id\n";
 
