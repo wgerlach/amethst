@@ -110,7 +110,7 @@ sub amethst_main {
 	close(CMD_SOURCE);
 
 
-	create_and_submit_workflow($tasks_array, $abundance_matrix, $groups_list, $tree);
+	return create_and_submit_workflow($tasks_array, $abundance_matrix, $groups_list, $tree);
 
 
 }
@@ -286,7 +286,7 @@ sub create_and_submit_workflow {
 
 
 	print "result from AWE server:\n".$json->pretty->encode( $submission_result )."\n";
-
+	return $job_id;
 }
 
 

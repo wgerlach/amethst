@@ -62,7 +62,7 @@ $h->{'cmdfile'} || die "no cmdfile defined";
 
 
 #abundance_matrix, $groups_list, $commands_list, $tree
-AMETHSTAWE::amethst_main($h->{'matrix'}, $h->{'groups'},$h->{'commands'}, ,$h->{'tree'});
+my $job_id = AMETHSTAWE::amethst_main($h->{'matrix'}, $h->{'groups'},$h->{'commands'}, ,$h->{'tree'});
 
 
 
