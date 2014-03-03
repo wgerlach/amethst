@@ -56,17 +56,17 @@ sub amethst_main {
 		$tree = undef;
 	}
 	
-	my $command_list_source
-	if (ref($commands_list) eq 'SCALAR' ) {
+	#my $command_list_source
+	#if (ref($commands_list) eq 'SCALAR' ) {
 		# ref to scalar; data in memory
 		
-	} elsif (ref($commands_list) eq '' ) {
+	#} elsif (ref($commands_list) eq '' ) {
 		# filename; memor in file
-	}
+	#}
 	
-	open(MEMORY, '>', \$var)
-    or die "Can't open memory file: $!\n";
-	print MEMORY "foo!\n";
+	#open(MEMORY, '>', \$var)
+    #or die "Can't open memory file: $!\n";
+	#print MEMORY "foo!\n";
 	
 	
 	my $tasks_array=[];
