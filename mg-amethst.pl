@@ -13,6 +13,8 @@ use SHOCK::Client;
 use JSON;
 use File::Basename;
 
+use AMETHSTAWE;
+
 use USAGEPOD qw(parse_options);
 
 
