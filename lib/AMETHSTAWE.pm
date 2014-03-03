@@ -71,7 +71,7 @@ sub amethst_main {
 	
 	my $tasks_array=[];
 	
-	open (CMD_SOURCE, '>', $commands_list) or die $!;
+	open (CMD_SOURCE, '<', $commands_list) or die $!;
 	while (my $line = <CMD_SOURCE>) {
 		
 		if ($line =~ /^\#job/) {
