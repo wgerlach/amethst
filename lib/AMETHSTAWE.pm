@@ -250,14 +250,21 @@ sub create_and_submit_workflow {
 		print "got:\n $pair_file\n $matrix_file, $group_file, $tree_file\n";
 		
 		
-		push (@{$tasks},
-		{
+		my $new_task = {
 			"task_id" => "amethst_".$i,
 			"task_template" => $amethst_version,
 			"CMDFILE" => ["shock", "[CMDFILE_$i]", $input_filename],
+			"ABUNDANCE-MATRIX" => ["shock", "[ABUNDANCE-MATRIX]", $matrix_file],
+			"GROUPS-LIST" => ["shock", "[GROUPS-LIST]", $group_file],
 			"OUTPUT" => $analysis_filename
 		}
-		);
+		if (defined($tree)) {
+			$new_task->{'TREE'} = ["shock", "[TREE]", $tree_file];
+		}
+		
+		push (@{$tasks}, $new_task );
+		
+		
 		
 		
 		$job_input->{'CMDFILE_'.$i}->{'data'} = $pair_file;
