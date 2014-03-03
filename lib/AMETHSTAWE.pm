@@ -189,6 +189,10 @@ sub create_and_submit_workflow {
 
 	my ($tasks_array, $abundance_matrix, $groups_list, $tree) = @_;
 	
+	if (@$tasks_array == 0) {
+		die "error: tasks_array empty";
+	}
+	
 	
 	############################################
 	# connect to AWE server and check the clients
