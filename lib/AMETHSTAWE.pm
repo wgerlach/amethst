@@ -8,7 +8,7 @@ use AWE::Job;
 use SHOCK::Client;
 
 
-
+use File::Slurp;
 use JSON;
 use File::Basename;
 
@@ -113,21 +113,21 @@ sub amethst_main {
 	if (ref($abundance_matrix) eq 'SCALAR' ) {
 		$am_data = $$abundance_matrix; # dereference
 	} elsif (ref($abundance_matrix) eq ''){
-		$am_data = $abundance_matrix;
+		$am_data = read_file( $abundance_matrix) ;
 	}
 
 	my $grp_data;
 	if (ref($groups_list) eq 'SCALAR' ) {
 		$grp_data = $$groups_list;  # dereference
 	} elsif (ref($groups_list) eq ''){
-		$grp_data = $groups_list;
+		$grp_data = read_file( $groups_list );
 	}
 
 	my $tree_data;
 	if (ref($tree) eq 'SCALAR' ) {
 		$tree_data = $$tree;  # dereference
 	} elsif (ref($tree) eq ''){
-		$tree_data = $tree;
+		$tree_data = read_file( $tree );
 	}
 
 
