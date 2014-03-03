@@ -28,16 +28,16 @@ my $shocktoken=$ENV{'GLOBUSONLINE'} || $ENV{'KB_AUTH_TOKEN'};
 my ($h, $help_text) = &parse_options (
 'name' => 'mg-amethst -- wrapper for amethst',
 'version' => '1',
-'synopsis' => 'mg-amethst -i <input> -o <output>',
+'synopsis' => 'mg-amethst --matrix=<inputmatrix> --groups=<groupsfile> --commands=<commandsfile>',
 'examples' => 'ls',
 'authors' => 'Wolfgang Gerlach',
 'options' => [
 [ 'matrix|m=s', "abundance matrix"],
 [ 'groups|g=s',  "groups file" ],
-[ 'commands|c=s',  "command file" ],
+[ 'commands|c=s',  "commands file" ],
 [ 'tree|t=s',  "tree (optional)" ],
-[ 'output|o=s', "out" ],
-[ 'nowait|n',   "asynchronous call" ],
+#[ 'output|o=s', "out" ],
+#[ 'nowait|n',   "asynchronous call" ],
 [ 'help|h', "", { hidden => 1  }]
 ]
 );
@@ -57,7 +57,8 @@ print "clientgroup: ". ($clientgroup || 'undef') ."\n\n";
 #$h->{'input'} || die "no input defined";
 #$h->{'output'} || die "no output defined";
 
-$h->{'cmdfile'} || die "no cmdfile defined";
+$h->{'matrix'} || die "no matrix defined";
+$h->{'groups'} || die "no groups defined";
 
 
 
