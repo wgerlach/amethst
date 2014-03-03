@@ -257,8 +257,8 @@ sub create_and_submit_workflow {
 			"ABUNDANCE-MATRIX" => ["shock", "[ABUNDANCE-MATRIX]", $matrix_file],
 			"GROUPS-LIST" => ["shock", "[GROUPS-LIST]", $group_file],
 			"OUTPUT" => $analysis_filename
-		}
-		if (defined($tree)) {
+		};
+		if ( defined($tree) ) {
 			$new_task->{'TREE'} = ["shock", "[TREE]", $tree_file];
 		}
 		
