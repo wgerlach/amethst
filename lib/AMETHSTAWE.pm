@@ -122,25 +122,26 @@ sub amethst_main {
 
 	my $am_data;
 	if (ref($abundance_matrix) eq 'SCALAR' ) {
-		$am_data = $$abundance_matrix; # dereference
+		$am_data = $$abundance_matrix; # dereference data
 	} elsif (ref($abundance_matrix) eq ''){
-		$am_data = read_file( $abundance_matrix) ;
+		$am_data = read_file( $abundance_matrix) ; # read data from file
 	}
 
 	my $grp_data;
 	if (ref($groups_list) eq 'SCALAR' ) {
-		$grp_data = $$groups_list;  # dereference
+		$grp_data = $$groups_list;  # dereference data
 	} elsif (ref($groups_list) eq ''){
-		$grp_data = read_file( $groups_list );
+		$grp_data = read_file( $groups_list );# read data from file
 	}
 
 	my $tree_data;
-	if (ref($tree) eq 'SCALAR' ) {
-		$tree_data = $$tree;  # dereference
-	} elsif (ref($tree) eq ''){
-		$tree_data = read_file( $tree );
+	if (defined $tree) {
+		if (ref($tree) eq 'SCALAR' ) {
+			$tree_data = $$tree;  # dereference data
+		} elsif (ref($tree) eq ''){
+			$tree_data = read_file( $tree );# read data from file
+		}
 	}
-
 
 	return create_and_submit_workflow($tasks_array, $am_data, $grp_data, $tree_data);
 
