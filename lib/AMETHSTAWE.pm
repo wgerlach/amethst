@@ -86,9 +86,9 @@ sub amethst_main {
 				die "analysis results file \"$analysis_filename\" already exists";
 			}
 			
-			my $cmd1 =  <CMD_SOURCE>;
-			my $cmd2 =  <CMD_SOURCE>;
-			my $sum_cmd =  <CMD_SOURCE>;
+			my $cmd1 = <CMD_SOURCE>;
+			my $cmd2 = <CMD_SOURCE>;
+			my $sum_cmd = <CMD_SOURCE>;
 			chomp($cmd1);
 			chomp($cmd2);
 			chomp($sum_cmd);
@@ -109,8 +109,29 @@ sub amethst_main {
 
 	close(CMD_SOURCE);
 
+	my $am_data;
+	if (ref($abundance_matrix) eq 'SCALAR' ) {
+		$am_data = $$abundance_matrix; # dereference
+	} elsif (ref($abundance_matrix) eq ''){
+		$am_data = $abundance_matrix;
+	}
 
-	return create_and_submit_workflow($tasks_array, $abundance_matrix, $groups_list, $tree);
+	my $grp_data;
+	if (ref($groups_list) eq 'SCALAR' ) {
+		$grp_data = $$groups_list;  # dereference
+	} elsif (ref($groups_list) eq ''){
+		$grp_data = $groups_list;
+	}
+
+	my $tree_data;
+	if (ref($tree) eq 'SCALAR' ) {
+		$tree_data = $$tree;  # dereference
+	} elsif (ref($tree) eq ''){
+		$tree_data = $tree;
+	}
+
+
+	return create_and_submit_workflow($tasks_array, $am_data, $grp_data, $tree_data);
 
 
 }
