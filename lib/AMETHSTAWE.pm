@@ -56,6 +56,17 @@ sub amethst_main {
 		$tree = undef;
 	}
 	
+	unless (defined $abundance_matrix) {
+		die "abundance_matrix not defined";
+	}
+	
+	unless (defined $groups_list) {
+		die "groups_list not defined";
+	}
+	unless (defined $commands_list) {
+		die "commands_list not defined";
+	}
+	
 	#my $command_list_source
 	#if (ref($commands_list) eq 'SCALAR' ) {
 		# ref to scalar; data in memory
