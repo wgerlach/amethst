@@ -228,10 +228,10 @@ sub create_and_submit_workflow {
 	my $tasks = [];
 	my $job_input = {};
 
-	$job_input->{'ABUNDANCE-MATRIX'}->{'data'} = $$abundance_matrix;
-	$job_input->{'GROUPS-LIST'}->{'data'} = $$groups_list;
+	$job_input->{'ABUNDANCE-MATRIX'}->{'data'} = $abundance_matrix;
+	$job_input->{'GROUPS-LIST'}->{'data'} = $groups_list;
 	if (defined($tree)) {
-		$job_input->{'TREE'}->{'data'} = $$tree;
+		$job_input->{'TREE'}->{'data'} = $tree;
 	}
 	
 	# create and sumbit workflows
