@@ -72,3 +72,6 @@ build-libs:
 		--url $(SELF_URL) \
 		$(SERVICE_SPEC) lib
 
+
+include $(TOP_DIR)/tools/Makefile.common.rules
+
