@@ -78,14 +78,15 @@ if (defined $h->{'local'}) {
 	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
 	
 	# slurp all files
-	$abundance_matrix_data = read_file( $h->{'matrix'});
-	$groups_list_data = read_file( $h->{'groups'});
-	$commands_list_data = read_file( $h->{'commands'});
+	my $abundance_matrix_data = read_file( $h->{'matrix'});
+	my $groups_list_data = read_file( $h->{'groups'});
+	my $commands_list_data = read_file( $h->{'commands'});
+	my $tree_data = undef;
 	if (defined $h->{'tree'}){
 		$tree_data = read_file($h->{'tree'});
 	}
 	
-	$amethst_obj->amethst($abundance_matrix, $groups_list, $commands_list, $tree);
+	$amethst_obj->amethst($abundance_matrix_data, $groups_list_data, $commands_list_data, $tree_data);
 	
 }
 
