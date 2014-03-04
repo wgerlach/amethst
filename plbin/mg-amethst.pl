@@ -6,16 +6,19 @@ use warnings;
 use FindBin;
 use lib $FindBin::Bin;
 
-use AWE::Client;
-use AWE::Job;
-use SHOCK::Client;
+use File::Slurp;
 
-use JSON;
-use File::Basename;
+#use AWE::Client;
+#use AWE::Job;
+#use SHOCK::Client;
 
-use AMETHSTAWE;
+#use JSON;
+#use File::Basename;
+
+#use AMETHSTAWE; only for direct
 
 use USAGEPOD qw(parse_options);
+use Bio::KBase::AmethstService::AmethstServiceImpl;
 
 
 my $aweserverurl =  $ENV{'AWE_SERVER_URL'};
@@ -65,8 +68,26 @@ $h->{'commands'} || die "no commands file defined";
 
 
 #abundance_matrix, $groups_list, $commands_list, $tree
-my $job_id = AMETHSTAWE::amethst_main($h->{'matrix'}, $h->{'groups'},$h->{'commands'}, ,$h->{'tree'});
 
+my $job_id = undef;
+if (defined $h->{'local'}) {
+	require AMETHSTAWE;
+	$job_id = AMETHSTAWE::amethst_main($h->{'matrix'}, $h->{'groups'},$h->{'commands'}, $h->{'tree'});
+} else {
+	
+	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
+	
+	# slurp all files
+	$abundance_matrix_data = read_file( $h->{'matrix'});
+	$groups_list_data = read_file( $h->{'groups'});
+	$commands_list_data = read_file( $h->{'commands'});
+	if (defined $h->{'tree'}){
+		$tree_data = read_file($h->{'tree'});
+	}
+	
+	$amethst_obj->amethst($abundance_matrix, $groups_list, $commands_list, $tree);
+	
+}
 
 
 

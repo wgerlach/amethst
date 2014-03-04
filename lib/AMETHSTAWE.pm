@@ -14,6 +14,8 @@ use File::Basename;
 
 
 
+
+
 my $aweserverurl =  $ENV{'AWE_SERVER_URL'} || die "AWE_SERVER_URL not defined";
 my $shockurl =  $ENV{'SHOCK_SERVER_URL'} || die "SHOCK_SERVER_URL not defined";
 my $clientgroup = $ENV{'AWE_CLIENT_GROUP'} || die "AWE_CLIENT_GROUP not defined";
