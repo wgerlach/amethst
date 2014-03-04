@@ -3,9 +3,12 @@ TARGET ?= /kb/deployment
 
 SERVICE_SPEC = amethst.spec      
 SERVICE_NAME = AmethstService
-SERVICE_PORT = 7109??
+SERVICE_PORT = 7109
 SERVICE_DIR  = amethst_service
 
+ifeq ($(SELF_URL),)
+	SELF_URL = http://localhost:$(SERVICE_PORT)
+endif
 
 SERVICE_PSGI = $(SERVICE_NAME).psgi
 
