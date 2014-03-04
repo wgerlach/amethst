@@ -39,8 +39,8 @@ EOF
 
 
 
-
-sub amethst_string {
+# this is string-only version
+sub amethst {
 	my ($abundance_matrix, $groups_list, $commands_list, $tree) = @_;
 	
 	return amethst_main(\$abundance_matrix, \$groups_list, \$commands_list, \$tree);
