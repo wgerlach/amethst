@@ -32,7 +32,7 @@ deploy-client: deploy-libs deploy-scripts
 
 deploy-libs: build-libs
 	rsync --exclude '*.bak*' -arv lib/. $(TARGET)/lib/.
-
+	cp MG-RAST-Tools/tools/lib/USAGEPOD.pm $(TARGET)/lib/
 
 deploy-scripts:
 	export KB_TOP=$(TARGET); \
