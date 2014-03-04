@@ -1,6 +1,8 @@
 DEPLOY_RUNTIME ?= /kb/runtime
 TARGET ?= /kb/deployment
 
+TOP_DIR = ../..
+
 SERVICE_SPEC = amethst.spec      
 SERVICE_NAME = AmethstService
 SERVICE_PORT = 7109
