@@ -17,7 +17,7 @@ TPAGE_ARGS = --define kb_runas_user=$(SERVICE_USER) --define kb_top=$(TARGET) --
 TOOLS_DIR = $(TOP_DIR)/tools
 WRAP_PERL_TOOL = wrap_perl
 WRAP_PERL_SCRIPT = bash $(TOOLS_DIR)/$(WRAP_PERL_TOOL).sh
-SRC_PERL = $(wildcard scripts/*.pl)
+SRC_PERL = $(wildcard plbin/*.pl)
 
 
 deploy: deploy-client deploy-service
