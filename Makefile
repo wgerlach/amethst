@@ -2,6 +2,8 @@ DEPLOY_RUNTIME ?= /kb/runtime
 TARGET ?= /kb/deployment
 
 TOP_DIR = ../..
+include $(TOP_DIR)/tools/Makefile.common
+
 
 SERVICE_SPEC = amethst.spec      
 SERVICE_NAME = AmethstService
