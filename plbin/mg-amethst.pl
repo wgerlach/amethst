@@ -63,10 +63,11 @@ print "clientgroup: ". ($clientgroup || 'undef') ."\n\n";
 #$h->{'input'} || die "no input defined";
 #$h->{'output'} || die "no output defined";
 
-$h->{'matrix'} || die "no matrix file defined";
-$h->{'groups'} || die "no groups file defined";
-$h->{'commands'} || die "no commands file defined";
-
+unless (defined $h->{'local'}) {
+	$h->{'matrix'} || die "no matrix file defined";
+	$h->{'groups'} || die "no groups file defined";
+	$h->{'commands'} || die "no commands file defined";
+}
 
 #abundance_matrix, $groups_list, $commands_list, $tree
 
@@ -130,9 +131,9 @@ if (defined $h->{'local'}) {
 }
 
 
-
-print "job submitted: $job_id\n";
-
+if (defined $job_id) {
+	print "job submitted: $job_id\n";
+}
 #unless (defined($h->{'nowait'})) {
 #	AWE::Job::wait_and_download_job_results ('awe' => $awe, 'shock' => $shock, 'jobs' => [$job_id], 'clientgroup' => $clientgroup);
 #}

@@ -26,12 +26,12 @@ my $shocktoken=$ENV{'GLOBUSONLINE'} || $ENV{'KB_AUTH_TOKEN'} || die "KB_AUTH_TOK
 my $task_tmpls_json = <<EOF;
 {
 	"amethst" : {
-		"cmd" : "AMETHST.pl -f @[CMDFILE] -z [OUTPUT]",
+		"cmd" : "mg-amethst --local -f @[CMDFILE] -z [OUTPUT]",
 		"inputs" : ["[CMDFILE]", "[ABUNDANCE-MATRIX]", "[GROUPS-LIST]"],
 		"outputs" : ["[OUTPUT]"]
 	},
 	"amethst-tree" : {
-		"cmd" : "AMETHST.pl -f @[CMDFILE] -z [OUTPUT]",
+		"cmd" : "mg-amethst --local -f @[CMDFILE] -z [OUTPUT]",
 		"inputs" : ["[CMDFILE]", "[ABUNDANCE-MATRIX]", "[GROUPS-LIST]", "[TREE]"],
 		"outputs" : ["[OUTPUT]"]
 	}
