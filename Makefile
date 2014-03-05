@@ -27,7 +27,7 @@ SRC_PERL = $(wildcard plbin/*.pl)
 deploy: deploy-client deploy-service
 
 
-deploy-all: deploy-client deploy-service
+deploy-all: initialize  deploy-client deploy-service
 
 
 deploy-client: deploy-libs deploy-scripts
@@ -36,7 +36,7 @@ deploy-libs: build-libs
 	rsync --exclude '*.bak*' -arv lib/. $(TARGET)/lib/.
 	cp MG-RAST-Tools/tools/lib/USAGEPOD.pm $(TARGET)/lib/
 
-deploy-scripts: initialize
+DEPRECATEDdeploy-scripts: initialize
 	export KB_TOP=$(TARGET); \
 	export KB_RUNTIME=$(DEPLOY_RUNTIME); \
 	export KB_PERL_PATH=$(TARGET)/lib bash ; \
