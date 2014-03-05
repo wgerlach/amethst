@@ -31,6 +31,7 @@ deploy-all: initialize  deploy-client deploy-service
 
 
 deploy-client: deploy-libs deploy-scripts
+	cp MG-RAST-Tools/tools/lib/USAGEPOD.pm $(TARGET)/lib/
 
 #deploy-libs: build-libs
 #	rsync --exclude '*.bak*' -arv lib/. $(TARGET)/lib/.
@@ -60,6 +61,7 @@ deploy-service: deploy-cfg
 	chmod +x $(TARGET)/services/$(SERVICE_DIR)/stop_service
 	$(TPAGE) $(TPAGE_ARGS) service/upstart.tt > service/$(SERVICE_NAME).conf
 	chmod +x service/$(SERVICE_NAME).conf
+	cp -r AMETHST $(TARGET)/services/$(SERVICE_DIR)/
 	echo "done executing deploy-service target"
 
 initialize:
