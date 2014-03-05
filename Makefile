@@ -44,7 +44,8 @@ deploy-scripts: initialize
 		basefile=`basename $$src`; \
 		base=`basename $$src .pl`; \
 		echo install $$src $$base ; \
-		cp $$src $(TARGET)/plbin ; \
+		mkdir -p $(TARGET)/plbin/ ; \
+		cp $$src $(TARGET)/plbin/ ; \
 		$(WRAP_PERL_SCRIPT) "$(TARGET)/plbin/$$basefile" $(TARGET)/bin/$$base ; \
 	done
 	cp -r AMETHST $(TARGET)/services/$(SERVICE_DIR)/
