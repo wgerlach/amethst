@@ -31,11 +31,11 @@ deploy-all: initialize  deploy-client deploy-service
 
 
 deploy-client: deploy-libs deploy-scripts
-	cp MG-RAST-Tools/tools/lib/USAGEPOD.pm $(TARGET)/lib/
 
-#deploy-libs: build-libs
+deploy-libs: build-libs
+	cp MG-RAST-Tools/tools/lib/USAGEPOD.pm $(TARGET)/lib/
 #	rsync --exclude '*.bak*' -arv lib/. $(TARGET)/lib/.
-#	cp MG-RAST-Tools/tools/lib/USAGEPOD.pm $(TARGET)/lib/
+
 
 DEPRECATEDdeploy-scripts: initialize
 	export KB_TOP=$(TARGET); \
@@ -72,16 +72,16 @@ deploy-upstart: deploy-service
 	-cp service/$(SERVICE_NAME).conf /etc/init/
 	echo "done executing deploy-upstart target"
 
-#build-libs:
-#	compile_typespec \
-#		--psgi $(SERVICE_PSGI)  \
-#		--impl Bio::KBase::$(SERVICE_NAME)::$(SERVICE_NAME)Impl \
-#		--service Bio::KBase::$(SERVICE_NAME)::Service \
-#		--client Bio::KBase::$(SERVICE_NAME)::Client \
-#		--py biokbase/$(SERVICE_NAME)/Client \
-#		--js javascript/$(SERVICE_NAME)/Client \
-#		--url $(SELF_URL) \
-#		$(SERVICE_SPEC) lib
+build-libs:
+	compile_typespec \
+		--psgi $(SERVICE_PSGI)  \
+		--impl Bio::KBase::$(SERVICE_NAME)::$(SERVICE_NAME)Impl \
+		--service Bio::KBase::$(SERVICE_NAME)::Service \
+		--client Bio::KBase::$(SERVICE_NAME)::Client \
+		--py biokbase/$(SERVICE_NAME)/Client \
+		--js javascript/$(SERVICE_NAME)/Client \
+		--url $(SELF_URL) \
+		$(SERVICE_SPEC) lib
 
 
 include $(TOP_DIR)/tools/Makefile.common.rules

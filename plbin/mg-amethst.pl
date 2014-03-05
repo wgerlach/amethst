@@ -112,6 +112,7 @@ if (defined $h->{'local'}) {
 	
 	print "found $amethst_pl\n";
 	
+	my $cmd = 'AMETHST.pl -f @[CMDFILE] -z [OUTPUT]';
 	
 } else {
 	
