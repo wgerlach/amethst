@@ -36,7 +36,7 @@ deploy-libs: build-libs
 	rsync --exclude '*.bak*' -arv lib/. $(TARGET)/lib/.
 	cp MG-RAST-Tools/tools/lib/USAGEPOD.pm $(TARGET)/lib/
 
-deploy-scripts:
+deploy-scripts: initialize
 	export KB_TOP=$(TARGET); \
 	export KB_RUNTIME=$(DEPLOY_RUNTIME); \
 	export KB_PERL_PATH=$(TARGET)/lib bash ; \
@@ -47,6 +47,8 @@ deploy-scripts:
 		cp $$src $(TARGET)/plbin ; \
 		$(WRAP_PERL_SCRIPT) "$(TARGET)/plbin/$$basefile" $(TARGET)/bin/$$base ; \
 	done
+	cp -r AMETHST $(TARGET)/services/$(SERVICE_DIR)/
+
 
 
 deploy-service: deploy-cfg
@@ -58,6 +60,10 @@ deploy-service: deploy-cfg
 	$(TPAGE) $(TPAGE_ARGS) service/upstart.tt > service/$(SERVICE_NAME).conf
 	chmod +x service/$(SERVICE_NAME).conf
 	echo "done executing deploy-service target"
+
+initialize:
+	git submodule init
+	git submodule update
 
 deploy-upstart: deploy-service
 	-cp service/$(SERVICE_NAME).conf /etc/init/

@@ -41,6 +41,7 @@ my ($h, $help_text) = &parse_options (
 [ 'groups|g=s',  "groups file" ],
 [ 'commands|c=s',  "commands file" ],
 [ 'tree|t=s',  "tree (optional)" ],
+[ 'local|l',  "local execution bypassing service" ],
 #[ 'output|o=s', "out" ],
 #[ 'nowait|n',   "asynchronous call" ],
 [ 'help|h', "", { hidden => 1  }]
@@ -71,8 +72,46 @@ $h->{'commands'} || die "no commands file defined";
 
 my $job_id = undef;
 if (defined $h->{'local'}) {
-	require AMETHSTAWE;
-	$job_id = AMETHSTAWE::amethst_main($h->{'matrix'}, $h->{'groups'},$h->{'commands'}, $h->{'tree'});
+	#require AMETHSTAWE;
+	#$job_id = AMETHSTAWE::amethst_main($h->{'matrix'}, $h->{'groups'},$h->{'commands'}, $h->{'tree'});
+	
+	my $KB_TOP = $ENV{'KB_TOP'};
+	
+	unless (defined $KB_TOP) {
+		die "KB_TOP not defined";
+	}
+	
+	if ($KB_TOP eq '') {
+		die "KB_TOP not defined";
+	}
+	
+	unless (-d $KB_TOP ) {
+		die "KB_TOP directory \"$KB_TOP\" not found";
+	}
+	
+	my $service_dir = $KB_TOP.'/services/amethst_service/';
+	
+	unless (-d $service_dir ) {
+		die "AMETHST service directory \"$service_dir\" not found";
+	}
+	
+	my $amethst_bin_dir = $service_dir.'AMETHST/';
+	
+	
+	unless (-d $amethst_bin_dir ) {
+		die "AMETHST bin directory \"$amethst_bin_dir\" not found";
+	}
+	
+	my $amethst_pl = $amethst_bin_dir.'AMETHST.pl';
+	
+	
+	unless (-e $amethst_pl) {
+		die "\"$amethst_pl\" not found";
+	}
+	
+	print "found $amethst_pl\n";
+	
+	
 } else {
 	
 	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
