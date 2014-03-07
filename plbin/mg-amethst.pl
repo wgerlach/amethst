@@ -116,7 +116,7 @@ if (defined $h->{'local'}) {
 	
 } else {
 	
-	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
+	
 	
 	# slurp all files
 	my $abundance_matrix_data = read_file( $h->{'matrix'});
@@ -126,6 +126,8 @@ if (defined $h->{'local'}) {
 	if (defined $h->{'tree'}){
 		$tree_data = read_file($h->{'tree'});
 	}
+	
+	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
 	
 	print "start amethst service\n";
 	$job_id = $amethst_obj->amethst($abundance_matrix_data, $groups_list_data, $commands_list_data, $tree_data);
