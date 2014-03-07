@@ -46,6 +46,7 @@ sub amethst {
 	my ($abundance_matrix, $groups_list, $commands_list, $tree) = @_;
 	
 	print STDERR "this is sub amethst \n";
+	system("echo huhu > /home/ubuntu/test.log");
 	
 	return amethst_main(\$abundance_matrix, \$groups_list, \$commands_list, \$tree);
 }
