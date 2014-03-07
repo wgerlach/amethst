@@ -108,7 +108,7 @@ if (defined $h->{'local'}) {
 	
 	#print "found $amethst_pl\n";
 	
-	my $cmd = amethst_pl.' -f '.$h->{'command_file'}.' -z '.$h->{'zip_prefix'};
+	my $cmd = $amethst_pl.' -f '.$h->{'command_file'}.' -z '.$h->{'zip_prefix'};
 	print "cmd: $cmd\n";
 	system($cmd);
 	
