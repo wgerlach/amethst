@@ -19,7 +19,7 @@ use Data::Dumper;
 #use AMETHSTAWE; only for direct
 
 use USAGEPOD qw(parse_options);
-use Bio::KBase::AmethstService::AmethstServiceImpl;
+
 
 
 my $aweserverurl =  $ENV{'AWE_SERVER_URL'};
@@ -113,6 +113,8 @@ if (defined $h->{'local'}) {
 	system($cmd);
 	
 } else {
+	
+	require use Bio::KBase::AmethstService::AmethstServiceImpl;
 	
 	$h->{'matrix'} || die "no matrix file defined";
 	$h->{'groups'} || die "no groups file defined";
