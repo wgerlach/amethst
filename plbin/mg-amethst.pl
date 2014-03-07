@@ -131,6 +131,7 @@ if (defined $h->{'local'}) {
 	
 	print "start amethst service\n";
 	$job_id = $amethst_obj->amethst($abundance_matrix_data, $groups_list_data, $commands_list_data, $tree_data);
+	print Dumper $job_id ;
 	
 }
 
