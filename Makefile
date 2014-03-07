@@ -33,8 +33,7 @@ deploy-all: initialize  deploy-client deploy-service
 deploy-client: deploy-libs deploy-scripts
 
 deploy-libs: build-libs
-	cp MG-RAST-Tools/tools/lib/USAGEPOD.pm $(TARGET)/lib/
-#	rsync --exclude '*.bak*' -arv lib/. $(TARGET)/lib/.
+	rsync --exclude '*.bak*' -arv MG-RAST-Tools/tools/lib/. $(TARGET)/lib/.
 
 
 DEPRECATEDdeploy-scripts: initialize
@@ -67,6 +66,7 @@ deploy-service: deploy-cfg
 initialize:
 	git submodule init
 	git submodule update
+	git submodule foreach git pull origin master
 
 deploy-upstart: deploy-service
 	-cp service/$(SERVICE_NAME).conf /etc/init/

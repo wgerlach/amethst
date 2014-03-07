@@ -43,12 +43,14 @@ my ($h, $help_text) = &parse_options (
 [ 'commands|c=s',  "commands file" ],
 [ 'tree|t=s',  "tree (optional)" ],
 [ 'local|l',  "local execution bypassing service" ],
-#[ 'output|o=s', "out" ],
-#[ 'nowait|n',   "asynchronous call" ],
+
+['local:'],
+[ 'command_file|f=s', "", { hidden => 1  }],
+[ 'zip_prefix|z=s', "", { hidden => 1  }],
+['']
 [ 'help|h', "", { hidden => 1  }]
 ]
 );
-
 
 
 if ($h->{'help'} || keys(%$h)==0) {
@@ -61,21 +63,14 @@ print "aweserverurl: ".($aweserverurl || 'undef') ."\n";
 print "shockurl: ". ($shockurl || 'undef') ."\n";
 print "clientgroup: ". ($clientgroup || 'undef') ."\n\n";
 
-#$h->{'input'} || die "no input defined";
-#$h->{'output'} || die "no output defined";
-
-unless (defined $h->{'local'}) {
-	$h->{'matrix'} || die "no matrix file defined";
-	$h->{'groups'} || die "no groups file defined";
-	$h->{'commands'} || die "no commands file defined";
-}
-
-#abundance_matrix, $groups_list, $commands_list, $tree
 
 my $job_id = undef;
 if (defined $h->{'local'}) {
 	#require AMETHSTAWE;
 	#$job_id = AMETHSTAWE::amethst_main($h->{'matrix'}, $h->{'groups'},$h->{'commands'}, $h->{'tree'});
+	
+	$h->{'command_file'} || die "no command_file defined";
+	$h->{'zip_prefix'} || die "no zip_prefix defined";
 	
 	my $KB_TOP = $ENV{'KB_TOP'};
 	
@@ -113,11 +108,13 @@ if (defined $h->{'local'}) {
 	
 	print "found $amethst_pl\n";
 	
-	my $cmd = 'AMETHST.pl -f @[CMDFILE] -z [OUTPUT]';
+	my $cmd = 'AMETHST.pl -f '.$h->{'command_file'}.' -z '.$h->{'zip_prefix'};
 	
 } else {
 	
-	
+	$h->{'matrix'} || die "no matrix file defined";
+	$h->{'groups'} || die "no groups file defined";
+	$h->{'commands'} || die "no commands file defined";
 	
 	# slurp all files
 	my $abundance_matrix_data = read_file( $h->{'matrix'});
@@ -130,10 +127,9 @@ if (defined $h->{'local'}) {
 	
 	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
 	
-	print "start amethst service\n";
-	$job_id = $amethst_obj->amethst($abundance_matrix_data, $groups_list_data, $commands_list_data, $tree_data);
-	print Dumper($job_id);
 	
+	$job_id = $amethst_obj->amethst($abundance_matrix_data, $groups_list_data, $commands_list_data, $tree_data);
+		
 }
 
 
