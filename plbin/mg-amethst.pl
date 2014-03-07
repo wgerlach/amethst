@@ -127,7 +127,7 @@ if (defined $h->{'local'}) {
 		$tree_data = read_file($h->{'tree'});
 	}
 	
-	$amethst_obj->amethst($abundance_matrix_data, $groups_list_data, $commands_list_data, $tree_data);
+	$job_id = $amethst_obj->amethst($abundance_matrix_data, $groups_list_data, $commands_list_data, $tree_data);
 	
 }
 
