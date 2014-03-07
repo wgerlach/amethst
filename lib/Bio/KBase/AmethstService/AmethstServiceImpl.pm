@@ -100,6 +100,7 @@ sub amethst
     my $ctx = $Bio::KBase::AmethstService::Service::CallContext;
     my($job_id);
     #BEGIN amethst
+	AMETHSTAWE::amethst($abundance_matrix, $groups_list, $commands_list, $tree);
     #END amethst
     my @_bad_returns;
     (!ref($job_id)) or push(@_bad_returns, "Invalid type for return variable \"job_id\" (value was \"$job_id\")");
