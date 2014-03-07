@@ -47,7 +47,7 @@ my ($h, $help_text) = &parse_options (
 ['local:'],
 [ 'command_file|f=s', "", { hidden => 1  }],
 [ 'zip_prefix|z=s', "", { hidden => 1  }],
-['']
+[''],
 [ 'help|h', "", { hidden => 1  }]
 ]
 );
