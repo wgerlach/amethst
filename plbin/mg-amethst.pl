@@ -106,9 +106,9 @@ if (defined $h->{'local'}) {
 		die "\"$amethst_pl\" not found";
 	}
 	
-	print "found $amethst_pl\n";
+	#print "found $amethst_pl\n";
 	
-	my $cmd = 'AMETHST.pl -f '.$h->{'command_file'}.' -z '.$h->{'zip_prefix'};
+	my $cmd = amethst_pl.' -f '.$h->{'command_file'}.' -z '.$h->{'zip_prefix'};
 	print "cmd: $cmd\n";
 	system($cmd);
 	
