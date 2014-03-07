@@ -45,6 +45,8 @@ EOF
 sub amethst {
 	my ($abundance_matrix, $groups_list, $commands_list, $tree) = @_;
 	
+	print "this is sub amethst \n";
+	
 	return amethst_main(\$abundance_matrix, \$groups_list, \$commands_list, \$tree);
 }
 
