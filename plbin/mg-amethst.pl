@@ -109,6 +109,8 @@ if (defined $h->{'local'}) {
 	print "found $amethst_pl\n";
 	
 	my $cmd = 'AMETHST.pl -f '.$h->{'command_file'}.' -z '.$h->{'zip_prefix'};
+	print "cmd: $cmd\n";
+	system($cmd);
 	
 } else {
 	
