@@ -43,11 +43,11 @@ my ($h, $help_text) = &parse_options (
 [ 'commands|c=s',  "commands file" ],
 [ 'tree|t=s',  "tree (optional)" ],
 [ 'local|l',  "local execution bypassing service" ],
-
-['local:'],
+'',
+'local:',
 [ 'command_file|f=s', "", { hidden => 1  }],
 [ 'zip_prefix|z=s', "", { hidden => 1  }],
-[''],
+'',
 [ 'help|h', "", { hidden => 1  }]
 ]
 );
