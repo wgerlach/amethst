@@ -114,7 +114,7 @@ if (defined $h->{'local'}) {
 	
 } else {
 	
-	require use Bio::KBase::AmethstService::AmethstServiceImpl;
+	require Bio::KBase::AmethstService::AmethstServiceImpl;
 	
 	$h->{'matrix'} || die "no matrix file defined";
 	$h->{'groups'} || die "no groups file defined";
