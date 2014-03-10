@@ -363,6 +363,20 @@ sub results {
 	
 	my $job = $awe->showJob($job_id);
 	print Dumper($job)."\n";
+	
+	unless (defined $job->{'data'}) {
+		die "job->{'data'} undef";
+	}
+	
+	unless (defined $job->{'data'}->{'tasks'}) {
+		die "job->{'data'}->{'tasks'} undef";
+	}
+	
+	
+	if (@{$job->{'data'}->{'tasks'}} ==0 ) {
+		die "job->{'data'}->{'tasks'} == 0";
+	}
+	
 	my $output_nodes = AWE::Job->get_awe_output_nodes($job->{'data'}, 'only_last_task' => 0);
 	print Dumper($output_nodes)."\n";
 	
