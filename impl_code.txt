@@ -18,7 +18,7 @@ use AMETHSTAWE;
 
 
 #BEGIN results
-	$results = AMETHSTAWE::results($job_id);
+	$return = AMETHSTAWE::results($job_id);
 #END results
 
 #BEGIN delete
