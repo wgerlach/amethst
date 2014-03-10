@@ -184,7 +184,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	foreach my $node (keys(%$results)) {
 		my $file = $results->{$node};
 		
-		$shock->download_to_path($node, '.');
+		$shock->download_to_path2($node, './'.$file);
 		
 	}
 	
