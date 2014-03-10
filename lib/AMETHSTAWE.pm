@@ -379,7 +379,7 @@ sub results {
 	
 	print "count tasks: ".@{$job->{'data'}->{'tasks'}}."\n";
 	
-	my $output_nodes = AWE::Job->get_awe_output_nodes($job->{'data'}, 'only_last_task' => 0);
+	my $output_nodes = AWE::Job::get_awe_output_nodes($job->{'data'}, 'only_last_task' => 0);
 	print Dumper($output_nodes)."\n";
 	
 	return "node list";
