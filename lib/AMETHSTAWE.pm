@@ -413,7 +413,10 @@ sub delete_job {
 	
 	my $job_deleted = AWE::Job::delete_jobs('awe' => $awe, 'shock' => $shock , 'jobs'=> [$job_id]);
 	
+	print "job_deleted: $job_deleted\n";
+	
 	if ($job_deleted == 1) {
+		
 		return "success";
 	}
 	return "not deleted";
