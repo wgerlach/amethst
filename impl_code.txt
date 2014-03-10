@@ -22,5 +22,5 @@ use AMETHSTAWE;
 #END results
 
 #BEGIN delete
-	$delete = $obj->delete($job_id);
+	$results = $obj->delete($job_id);
 #END delete

@@ -100,7 +100,7 @@ sub amethst
     my $ctx = $Bio::KBase::AmethstService::Service::CallContext;
     my($job_id);
     #BEGIN amethst
-	AMETHSTAWE::amethst($abundance_matrix, $groups_list, $commands_list, $tree);
+	$job_id = AMETHSTAWE::amethst($abundance_matrix, $groups_list, $commands_list, $tree);
     #END amethst
     my @_bad_returns;
     (!ref($job_id)) or push(@_bad_returns, "Invalid type for return variable \"job_id\" (value was \"$job_id\")");
@@ -167,7 +167,7 @@ sub status
     my $ctx = $Bio::KBase::AmethstService::Service::CallContext;
     my($status);
     #BEGIN status
-	$status =$obj->status($job_id);
+	$status = $obj->status($job_id);
     #END status
     my @_bad_returns;
     (!ref($status)) or push(@_bad_returns, "Invalid type for return variable \"status\" (value was \"$status\")");
@@ -234,6 +234,7 @@ sub results
     my $ctx = $Bio::KBase::AmethstService::Service::CallContext;
     my($results);
     #BEGIN results
+	$results = $obj->results($job_id);
     #END results
     my @_bad_returns;
     (!ref($results)) or push(@_bad_returns, "Invalid type for return variable \"results\" (value was \"$results\")");
@@ -241,6 +242,73 @@ sub results
 	my $msg = "Invalid returns passed to results:\n" . join("", map { "\t$_\n" } @_bad_returns);
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
 							       method_name => 'results');
+    }
+    return($results);
+}
+
+
+
+
+=head2 delete
+
+  $results = $obj->delete($job_id)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$job_id is a string
+$results is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$job_id is a string
+$results is a string
+
+
+=end text
+
+
+
+=item Description
+
+
+
+=back
+
+=cut
+
+sub delete
+{
+    my $self = shift;
+    my($job_id) = @_;
+
+    my @_bad_arguments;
+    (!ref($job_id)) or push(@_bad_arguments, "Invalid type for argument \"job_id\" (value was \"$job_id\")");
+    if (@_bad_arguments) {
+	my $msg = "Invalid arguments passed to delete:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+							       method_name => 'delete');
+    }
+
+    my $ctx = $Bio::KBase::AmethstService::Service::CallContext;
+    my($results);
+    #BEGIN delete
+	$results = $obj->delete($job_id);
+    #END delete
+    my @_bad_returns;
+    (!ref($results)) or push(@_bad_returns, "Invalid type for return variable \"results\" (value was \"$results\")");
+    if (@_bad_returns) {
+	my $msg = "Invalid returns passed to delete:\n" . join("", map { "\t$_\n" } @_bad_returns);
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+							       method_name => 'delete');
     }
     return($results);
 }
@@ -289,4 +357,3 @@ sub version {
 =cut
 
 1;
-
