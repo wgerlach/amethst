@@ -301,7 +301,10 @@ sub delete_job
     my $ctx = $Bio::KBase::AmethstService::Service::CallContext;
     my($results);
     #BEGIN delete
+	print "job_id: $job_id\n";
 	$results = AMETHSTAWE::delete_job($job_id);
+	require Data::Dumper;
+	print "results: ".Dumper($results)."\n";
     #END delete
     my @_bad_returns;
     (!ref($results)) or push(@_bad_returns, "Invalid type for return variable \"results\" (value was \"$results\")");
