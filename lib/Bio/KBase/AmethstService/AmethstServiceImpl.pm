@@ -167,7 +167,7 @@ sub status
     my $ctx = $Bio::KBase::AmethstService::Service::CallContext;
     my($status);
     #BEGIN status
-	$status = $obj->status($job_id);
+	$status = AMETHSTAWE::status($job_id);
     #END status
     my @_bad_returns;
     (!ref($status)) or push(@_bad_returns, "Invalid type for return variable \"status\" (value was \"$status\")");
@@ -234,7 +234,7 @@ sub results
     my $ctx = $Bio::KBase::AmethstService::Service::CallContext;
     my($results);
     #BEGIN results
-	$results = $obj->results($job_id);
+	$results = AMETHSTAWE::results($job_id);
     #END results
     my @_bad_returns;
     (!ref($results)) or push(@_bad_returns, "Invalid type for return variable \"results\" (value was \"$results\")");
@@ -301,7 +301,7 @@ sub delete
     my $ctx = $Bio::KBase::AmethstService::Service::CallContext;
     my($results);
     #BEGIN delete
-	$results = $obj->delete($job_id);
+	$results = AMETHSTAWE::delete_job($job_id);
     #END delete
     my @_bad_returns;
     (!ref($results)) or push(@_bad_returns, "Invalid type for return variable \"results\" (value was \"$results\")");

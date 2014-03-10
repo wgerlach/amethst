@@ -13,14 +13,14 @@ use AMETHSTAWE;
 #END amethst
 
 #BEGIN status
-	$status = $obj->status($job_id);
+	$status = AMETHSTAWE::status($job_id);
 #END status
 
 
 #BEGIN results
-	$results = $obj->results($job_id);
+	$results = AMETHSTAWE::results($job_id);
 #END results
 
 #BEGIN delete
-	$results = $obj->delete($job_id);
+	$results = AMETHSTAWE::delete($job_id);
 #END delete

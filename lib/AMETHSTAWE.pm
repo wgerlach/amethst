@@ -371,7 +371,7 @@ sub results {
 }
 
 # this will delete shock nodes only when they have the "temporary" attribute
-sub delete {
+sub delete_job {
 	my ($job_id) = @_;
 	
 	my $awe = new AWE::Client($aweserverurl, $shocktoken);
