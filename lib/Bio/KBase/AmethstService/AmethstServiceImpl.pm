@@ -301,7 +301,7 @@ sub delete
     my $ctx = $Bio::KBase::AmethstService::Service::CallContext;
     my($results);
     #BEGIN delete
-	$results = AMETHSTAWE::delete($job_id);
+	$results = AMETHSTAWE::delete_job($job_id);
     #END delete
     my @_bad_returns;
     (!ref($results)) or push(@_bad_returns, "Invalid type for return variable \"results\" (value was \"$results\")");
