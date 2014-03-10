@@ -411,7 +411,7 @@ sub delete_job {
 	}
 
 	
-	my $job = AWE::Job::delete_jobs('awe' => $awe, 'shock' => $shock , 'clientgroup' => $clientgroup, 'jobs'=> [$job_id]);
+	my $job = AWE::Job::delete_jobs('awe' => $awe, 'shock' => $shock , 'jobs'=> [$job_id]);
 	
 	
 	my $status = $job->{'status'} || "unknown";
