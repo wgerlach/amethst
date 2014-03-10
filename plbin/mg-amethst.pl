@@ -162,7 +162,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	require Bio::KBase::AmethstService::AmethstServiceImpl;
 	
 	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
-	my $results = $amethst_obj->status($h->{'results'});
+	my $results = $amethst_obj->status($h->{'results'}) || 'undefined';
 	
 	print "results: ".$results."\n";
 	

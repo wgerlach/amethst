@@ -349,7 +349,7 @@ sub status {
 	my $job = $awe->showJob($job_id);
 	print Dumper($job)."\n";
 	
-	return $job->{'status'};
+	return $job->{'data'}->{'state'};
 	
 }
 
@@ -388,7 +388,7 @@ sub delete_job {
 	my $job = $awe->delete_jobs('awe' => $awe, 'shock' => $shock , 'clientgroup' => $clientgroup, 'jobs'=> [$job_id]);
 	
 	
-	my $status = $job->{'data'}->{'state'} || "unknown";
+	my $status = $job->{'status'} || "unknown";
 	
 	return $status;
 	
