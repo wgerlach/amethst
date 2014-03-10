@@ -196,7 +196,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	
 	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
 
-	my $delete_status = $amethst_obj->delete_job($h->{'delete'});
+	my $delete_status = $amethst_obj->delete_job($h->{'delete'}) || 'undefined';
 	
 	print "delete_status: $delete_status\n"
 	
