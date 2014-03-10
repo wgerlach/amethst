@@ -164,7 +164,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
 	my $results = $amethst_obj->status($h->{'results'});
 	
-	print "results: ".results."\n";
+	print "results: ".$results."\n";
 	
 	
 } elsif (defined $h->{'delete'}) {
