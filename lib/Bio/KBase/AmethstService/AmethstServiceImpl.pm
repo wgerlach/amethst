@@ -285,7 +285,7 @@ sub results
  
  =cut
 
-sub delete
+sub delete_job
 {
     my $self = shift;
     my($job_id) = @_;
