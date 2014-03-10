@@ -184,10 +184,11 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	foreach my $node (keys(%$results)) {
 		my $file = $results->{$node};
 		
+		print "downloading \"$file\" ...\n";
 		$shock->download_to_path2($node, './'.$file);
 		
 	}
-	
+	print "all files downloaded\n";
 	
 } elsif (defined $h->{'delete'}) {
 
