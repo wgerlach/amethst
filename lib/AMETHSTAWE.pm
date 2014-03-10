@@ -364,7 +364,7 @@ sub results {
 	my $job = $awe->showJob($job_id);
 	
 	my $output_nodes = AWE::Job->get_awe_output_nodes($job->{'data'}, 'only_last_task' => 0);
-	print Dumper($job)."\n";
+	print Dumper($output_nodes)."\n";
 	
 	return "node list";
 	
