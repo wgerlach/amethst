@@ -152,7 +152,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	require Bio::KBase::AmethstService::AmethstServiceImpl;
 	
 	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
-	my $status = $amethst_obj->status($h->{'status'});
+	my $status = $amethst_obj->status($h->{'status'}) || 'undefined';
 
 	print "status: ".$status."\n";
 	
@@ -162,7 +162,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	require Bio::KBase::AmethstService::AmethstServiceImpl;
 	
 	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
-	my $results = $amethst_obj->status($h->{'results'}) || 'undefined';
+	my $results = $amethst_obj->results($h->{'results'}) || 'undefined';
 	
 	print "results: ".$results."\n";
 	
@@ -185,4 +185,3 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 
 
 
-print "finished\n";
