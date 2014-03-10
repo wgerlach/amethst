@@ -361,6 +361,11 @@ sub results {
 		die;
 	}
 	
+	my $shock = new SHOCK::Client($shockurl, $shocktoken); # shock production
+	unless (defined $shock) {
+		die;
+	}
+	
 	my $job = $awe->showJob($job_id);
 	print Dumper($job)."\n";
 	
@@ -382,7 +387,15 @@ sub results {
 	my $output_nodes = AWE::Job::get_awe_output_nodes($job->{'data'}, 'only_last_task' => 0);
 	print Dumper($output_nodes)."\n";
 	
-	return "node list";
+	#return shocknode-filename pairs
+	my $node_mapping={};
+	foreach my $file (keys(%$output_nodes)) {
+		my $node = $output_nodes->{$file}->{'node'};
+		$node_mapping->{$node}=$file;
+	}
+	
+	
+	return $node_mapping;
 	
 }
 
