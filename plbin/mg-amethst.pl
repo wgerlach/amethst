@@ -166,6 +166,28 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	
 	print "results: ".Dumper($results)."\n";
 	
+	foreach my $node (keys(%$results)) {
+		my $file = $results->{$node};
+		if (-e $file) {
+			print "error: file $file already exists\n";
+			exit(1);
+		}
+	}
+	
+	require SHOCK::Client;
+	
+	my $shock = new SHOCK::Client($shockurl, $shocktoken); # shock production
+	unless (defined $shock) {
+		die;
+	}
+	
+	foreach my $node (keys(%$results)) {
+		my $file = $results->{$node};
+		
+		$shock->download_to_path($node, '.');
+		
+	}
+	
 	
 } elsif (defined $h->{'delete'}) {
 

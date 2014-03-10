@@ -361,10 +361,7 @@ sub results {
 		die;
 	}
 	
-	my $shock = new SHOCK::Client($shockurl, $shocktoken); # shock production
-	unless (defined $shock) {
-		die;
-	}
+	
 	
 	my $job = $awe->showJob($job_id);
 	print Dumper($job)."\n";
