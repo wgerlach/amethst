@@ -338,5 +338,58 @@ sub create_and_submit_workflow {
 	return $job_id;
 }
 
+sub status {
+	my ($job_id) = @_;
+	
+	my $awe = new AWE::Client($aweserverurl, $shocktoken);
+	unless (defined $awe) {
+		die;
+	}
+	
+	my $job = $awe->showJob($job_id);
+	print Dumper($job)."\n";
+	
+	return $job->{'status'};
+	
+}
 
+sub results {
+	my ($job_id) = @_;
+	
+	my $awe = new AWE::Client($aweserverurl, $shocktoken);
+	unless (defined $awe) {
+		die;
+	}
+	
+	my $job = $awe->showJob($job_id);
+	
+	my $output_nodes = AWE::Job->get_awe_output_nodes($job->{'data'}, 'only_last_task' => 0);
+	print Dumper($job)."\n";
+	
+	return "node list";
+	
+}
 
+# this will delete shock nodes only when they have the "temporary" attribute
+sub delete {
+	my ($job_id) = @_;
+	
+	my $awe = new AWE::Client($aweserverurl, $shocktoken);
+	unless (defined $awe) {
+		die;
+	}
+	
+	my $shock = new SHOCK::Client($shockurl, $shocktoken); # shock production
+	unless (defined $shock) {
+		die;
+	}
+
+	
+	my $job = $awe->delete_jobs('awe' => $awe, 'shock' => $shock , 'clientgroup' => $clientgroup, 'jobs'=> [$job_id]);
+	
+	
+	my $status = $job->{'status'} || "unknown";
+	
+	return $status;
+	
+}

@@ -38,16 +38,22 @@ my ($h, $help_text) = &parse_options (
 'examples' => 'ls',
 'authors' => 'Wolfgang Gerlach',
 'options' => [
+'workflow submission:',
 [ 'matrix|m=s', "abundance matrix"],
 [ 'groups|g=s',  "groups file" ],
 [ 'commands|c=s',  "commands file" ],
 [ 'tree|t=s',  "tree (optional)" ],
-[ 'local|l',  "local execution bypassing service" ],
 '',
-'local:',
+'other commands:',
+[ 'status|s=s' , 'show status of a given AWE job_id'],
+[ 'results=s' , 'download results for a given AWE job_id'],
+[ 'delete=s' , 'delete AWE Job (and SHOCK files) for a given AWE job_id'],
+'',
+'only local: (bypasses service)',
 [ 'command_file|f=s', ""],
 [ 'zip_prefix|z=s', ""],
 '',
+[ 'local', "", { hidden => 1  }], #deprecated
 [ 'help|h', "", { hidden => 1  }]
 ]
 );
@@ -65,7 +71,7 @@ print "clientgroup: ". ($clientgroup || 'undef') ."\n\n";
 
 
 my $job_id = undef;
-if (defined $h->{'local'}) {
+if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	#require AMETHSTAWE;
 	#$job_id = AMETHSTAWE::amethst_main($h->{'matrix'}, $h->{'groups'},$h->{'commands'}, $h->{'tree'});
 	
@@ -112,7 +118,7 @@ if (defined $h->{'local'}) {
 	print "cmd: $cmd\n";
 	system($cmd);
 	
-} else {
+} elsif ((defined $h->{'matrix'}) || (defined $h->{'groups'}) || (defined $h->{'commands'})) {
 	
 	require Bio::KBase::AmethstService::AmethstServiceImpl;
 	
@@ -133,12 +139,44 @@ if (defined $h->{'local'}) {
 	
 	
 	$job_id = $amethst_obj->amethst($abundance_matrix_data, $groups_list_data, $commands_list_data, $tree_data);
-		
-}
+	
+	unless (defined $job_id) {
+		$job_id = 'undefined';
+	}
+	print "job submitted, job_id: $job_id\n";
+	
+	
+	
+} elsif (defined $h->{'status'}) {
+	
+	require Bio::KBase::AmethstService::AmethstServiceImpl;
+	
+	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
+	my $status = $amethst_obj->status($h->{'status'});
 
+	print "status: ".$status."\n";
+	
+	
+} elsif (defined $h->{'results'}) {
+	
+	require Bio::KBase::AmethstService::AmethstServiceImpl;
+	
+	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
+	my $results = $amethst_obj->status($h->{'results'});
+	
+	print "results: ".results."\n";
+	
+	
+} elsif (defined $h->{'delete'}) {
 
-if (defined $job_id) {
-	print "job submitted: $job_id\n";
+	require Bio::KBase::AmethstService::AmethstServiceImpl;
+	
+	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
+
+	my $delete_status = $amethst_obj->status($h->{'delete'});
+	
+	print "delete_status: $delete_status\n"
+	
 }
 #unless (defined($h->{'nowait'})) {
 #	AWE::Job::wait_and_download_job_results ('awe' => $awe, 'shock' => $shock, 'jobs' => [$job_id], 'clientgroup' => $clientgroup);

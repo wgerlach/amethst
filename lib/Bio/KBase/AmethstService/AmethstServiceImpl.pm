@@ -167,6 +167,7 @@ sub status
     my $ctx = $Bio::KBase::AmethstService::Service::CallContext;
     my($status);
     #BEGIN status
+	$status =$obj->status($job_id);
     #END status
     my @_bad_returns;
     (!ref($status)) or push(@_bad_returns, "Invalid type for return variable \"status\" (value was \"$status\")");
