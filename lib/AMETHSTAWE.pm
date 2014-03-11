@@ -269,12 +269,12 @@ sub create_and_submit_workflow {
 	
 	
 	my $newworkflow = new AWE::Workflow(
-	"pipeline"=> "amethst",
-	"name"=> "amethst",
-	"project"=> "amethst",
-	"user"=> "kbase-user",
-	"clientgroups"=> $clientgroup,
-	"noretry"=> JSON::true
+		"pipeline"=> "amethst",
+		"name"=> "amethst",
+		"project"=> "amethst",
+		"user"=> "kbase-user",
+		"clientgroups"=> $clientgroup,
+		"noretry"=> JSON::true
 	);
 		
 	
