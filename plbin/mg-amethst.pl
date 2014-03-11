@@ -32,48 +32,7 @@ my $shocktoken=$ENV{'GLOBUSONLINE'} || $ENV{'KB_AUTH_TOKEN'};
 
 ##############################################
 
-my ($h, $help_text) = &parse_options (
-'name' => 'mg-amethst -- wrapper for amethst',
-'version' => '1',
-'synopsis' => 'mg-amethst --matrix=<inputmatrix> --groups=<groupsfile> --commands=<commandsfile>',
-'examples' => 'ls',
-'authors' => 'Wolfgang Gerlach',
-'options' => [
-'workflow submission:',
-[ 'matrix|m=s', "abundance matrix"],
-[ 'groups|g=s',  "groups file" ],
-[ 'commands|c=s',  "commands file" ],
-[ 'tree|t=s',  "tree (optional)" ],
-'',
-'other commands:',
-[ 'status|s=s' , 'show status of a given AWE job_id'],
-[ 'download|d=s' , 'download results for a given AWE job_id'],
-[ 'delete=s' , 'delete AWE Job (and SHOCK files) for a given AWE job_id'],
-'',
-'only local: (bypasses service)',
-[ 'command_file|f=s', ""],
-[ 'zip_prefix|z=s', ""],
-'',
-[ 'local', "", { hidden => 1  }], #deprecated
-[ 'help|h', "", { hidden => 1  }]
-]
-);
-
-
-if ($h->{'help'} || keys(%$h)==0) {
-	print $help_text;
-	exit(0);
-}
-
-
-my $job_id = undef;
-if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
-	#require AMETHSTAWE;
-	#$job_id = AMETHSTAWE::amethst_main($h->{'matrix'}, $h->{'groups'},$h->{'commands'}, $h->{'tree'});
-	
-	$h->{'command_file'} || die "no command_file defined";
-	$h->{'zip_prefix'} || die "no zip_prefix defined";
-	
+sub find_amethst_bin_dir {
 	my $KB_TOP = $ENV{'KB_TOP'};
 	
 	unless (defined $KB_TOP) {
@@ -100,8 +59,57 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	unless (-d $amethst_bin_dir ) {
 		die "AMETHST bin directory \"$amethst_bin_dir\" not found";
 	}
+	return $amethst_bin_dir;
+}
+
+##############################################
+
+my ($h, $help_text) = &parse_options (
+'name' => 'mg-amethst -- wrapper for amethst',
+'version' => '1',
+'synopsis' => 'mg-amethst --matrix=<inputmatrix> --groups=<groupsfile> --commands=<commandsfile>',
+'examples' => 'ls',
+'authors' => 'Wolfgang Gerlach',
+'options' => [
+'workflow submission:',
+[ 'matrix|m=s', "abundance matrix"],
+[ 'groups|g=s',  "groups file" ],
+[ 'commands|c=s',  "commands file" ],
+[ 'tree|t=s',  "tree (optional)" ],
+'',
+'other commands:',
+[ 'status|s=s' , 'show status of a given AWE job_id'],
+[ 'download|d=s' , 'download results for a given AWE job_id'],
+[ 'delete=s' , 'delete AWE Job (and SHOCK files) for a given AWE job_id'],
+'',
+'only local: (bypasses service)',
+[ 'command_file|f=s', ""],
+[ 'zip_prefix|z=s', ""],
+[ 'summary', "" ]
+'',
+[ 'local', "", { hidden => 1  }], #deprecated
+[ 'help|h', "", { hidden => 1  }]
+]
+);
+
+
+if ($h->{'help'} || keys(%$h)==0) {
+	print $help_text;
+	exit(0);
+}
+
+
+my $job_id = undef;
+if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
+	#require AMETHSTAWE;
+	#$job_id = AMETHSTAWE::amethst_main($h->{'matrix'}, $h->{'groups'},$h->{'commands'}, $h->{'tree'});
 	
-	my $amethst_pl = $amethst_bin_dir.'AMETHST.pl';
+	$h->{'command_file'} || die "no command_file defined";
+	$h->{'zip_prefix'} || die "no zip_prefix defined";
+	
+	
+	
+	my $amethst_pl = find_amethst_bin_dir().'AMETHST.pl';
 	
 	
 	unless (-e $amethst_pl) {
@@ -113,6 +121,21 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	my $cmd = $amethst_pl.' -f '.$h->{'command_file'}.' -z '.$h->{'zip_prefix'};
 	print "cmd: $cmd\n";
 	system($cmd);
+
+} elsif ( defined $h->{'summary'} ) {
+	
+	my $summary_pl = find_amethst_bin_dir().'compile_p-values-summary_files.pl';
+	
+	
+	unless (-e $summary_pl) {
+		die "\"$summary_pl\" not found";
+	}
+	
+	my $cmd = $summary_pl.' -g -u';
+	print "cmd: $cmd\n";
+	system($cmd);
+	
+	
 	
 } elsif ((defined $h->{'matrix'}) || (defined $h->{'groups'}) || (defined $h->{'commands'})) {
 	
