@@ -273,7 +273,7 @@ sub create_and_submit_workflow {
 	
 	# create and sumbit workflows
 	for (my $i = 0 ; $i < @$tasks_array ; ++$i) {
-		#my $task_array = $tasks_array->[$i];
+		my $task_array = $tasks_array->[$i];
 		
 		my ($analysis_filename, $pair_file, $matrix_file, $group_file, $tree_file) = @{$task_array};
 		
