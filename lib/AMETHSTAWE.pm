@@ -368,20 +368,21 @@ exit(0);
 
 
 	# create job with the input defined above
-	my $workflow = $awe_job->create(%$job_input);#define workflow output
+	#my $workflow = $awe_job->create(%$job_input);#define workflow output
 
-	print "AWE job ready for submission:\n";
-	print $json->pretty->encode( $workflow )."\n";
+	#print "AWE job ready for submission:\n";
+	#print $json->pretty->encode( $workflow )."\n";
 
 	#exit(0);
-	print "submit job to AWE server...\n";
-	my $submission_result = $awe->submit_job('json_data' => $json->encode($workflow));
+	#print "submit job to AWE server...\n";
+	#my $submission_result = $awe->submit_job('json_data' => $json->encode($workflow));
 
-	my $job_id = $submission_result->{'data'}->{'id'} || die "no job_id found";
+	#my $job_id = $submission_result->{'data'}->{'id'} || die "no job_id found";
 
 
-	print "result from AWE server:\n".$json->pretty->encode( $submission_result )."\n";
-	return $job_id;
+	#print "result from AWE server:\n".$json->pretty->encode( $submission_result )."\n";
+	#return $job_id;
+	return "xxx";
 }
 
 sub status {
