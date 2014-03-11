@@ -7,6 +7,7 @@ use FindBin;
 use lib $FindBin::Bin;
 
 use File::Slurp;
+use Config::Simple;
 
 #use AWE::Client;
 #use AWE::Job;
@@ -63,11 +64,6 @@ if ($h->{'help'} || keys(%$h)==0) {
 	print $help_text;
 	exit(0);
 }
-
-print "Configuration:\n";
-#print "aweserverurl: ".($aweserverurl || 'undef') ."\n";
-print "shockurl: ". ($shockurl || 'undef') ."\n";
-#print "clientgroup: ". ($clientgroup || 'undef') ."\n\n";
 
 
 my $job_id = undef;
@@ -175,6 +171,15 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	}
 	
 	require SHOCK::Client;
+	
+	unless (defined($shockurl) && $shockurl ne '') {
+
+		$cfg = new Config::Simple('app.ini');
+
+		
+	}
+	
+	
 	
 	my $shock = new SHOCK::Client($shockurl, $shocktoken); # shock production
 	unless (defined $shock) {

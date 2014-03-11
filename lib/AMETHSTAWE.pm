@@ -5,6 +5,9 @@ use warnings;
 
 use AWE::Client;
 use AWE::Job;
+
+use AWE::Workflow;
+
 use SHOCK::Client;
 
 
@@ -211,6 +214,14 @@ sub create_and_submit_workflow {
 	}
 	
 	
+	
+	my $workflow = new AWE::Workflow();
+	
+	
+	my $wf_h = $workflow->getHash();
+	print Dumper($wf_h);
+	exit(0);
+	
 	############################################
 	# connect to AWE server and check the clients
 
@@ -289,8 +300,18 @@ sub create_and_submit_workflow {
 		
 	}
 
-
-
+#compile_p-values-summary_files.pl -g -u
+	
+	
+	#my $last_task = {
+	#	"task_id" => "amethst_".$i,
+	#	"task_template" => $amethst_version,
+	#	"CMDFILE" => ["shock", "[CMDFILE_$i]", $input_filename],
+	#	"ABUNDANCE-MATRIX" => ["shock", "[ABUNDANCE-MATRIX]", $matrix_file],
+	#	"GROUPS-LIST" => ["shock", "[GROUPS-LIST]", $group_file],
+	#	"OUTPUT" => $analysis_filename
+	#};
+	#push (@{$tasks}, $last_task );
 
 
 	my $awe_job = AWE::Job->new(
