@@ -336,51 +336,25 @@ sub create_and_submit_workflow {
 	}
 
 	
-	
+	# last summary task
 	
 	my $newtask = new AWE::Task();
 	
 	$newtask->command('compile_p-values-summary_files.pl -g -u');
+	
+	
+	
 	$newtask->dependsOn(\@taskids);
 	
 	
 	$newworkflow->addTask($newtask);
 	
-	my $wf_h = $newworkflow->getHash();
-	print Dumper($wf_h);
-	exit(0);
+		
 	
-#compile_p-values-summary_files.pl -g -u
-	
-	
-	#my $last_task = {
-	#	"task_id" => "amethst_".$i,
-	#	"task_template" => $amethst_version,
-	#	"CMDFILE" => ["shock", "[CMDFILE_$i]", $input_filename],
-	#	"ABUNDANCE-MATRIX" => ["shock", "[ABUNDANCE-MATRIX]", $matrix_file],
-	#	"GROUPS-LIST" => ["shock", "[GROUPS-LIST]", $group_file],
-	#	"OUTPUT" => $analysis_filename
-	#};
-	#push (@{$tasks}, $last_task );
-
-
-	my $awe_job = AWE::Job->new(
-	'info' => {
-		"pipeline"=> "amethst",
-		"name"=> "amethst-job_".int(rand(100000)),
-		"project"=> "project",
-		"user"=> "wgerlach",
-		"clientgroups"=> $clientgroup,
-		"noretry"=> JSON::true
-	},
-	'shockhost' => $shockurl,
-	'task_templates' => $task_tmpls,
-	'tasks' => $tasks
-	);
 
 	my $json = JSON->new;
-	print "AWE job without input:\n".$json->pretty->encode( $awe_job->hash() )."\n";
-
+	print "AWE job without input:\n".$json->pretty->encode( $newworkflow->getHash() )."\n";
+exit(0);
 
 
 
