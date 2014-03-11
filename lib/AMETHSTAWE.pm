@@ -268,7 +268,14 @@ sub create_and_submit_workflow {
 	
 	
 	
-	my $newworkflow = new AWE::Workflow();
+	my $newworkflow = new AWE::Workflow(
+	"pipeline"=> "amethst",
+	"name"=> "amethst",
+	"project"=> "amethst",
+	"user"=> "kbase-user",
+	"clientgroups"=> $clientgroup,
+	"noretry"=> JSON::true
+	);
 		
 	
 	
@@ -303,7 +310,7 @@ sub create_and_submit_workflow {
 		}
 		
 		
-		$newtask->addOutput(new AWE::TaskOutput($analysis_filename, 'host'));
+		$newtask->addOutput(new AWE::TaskOutput($analysis_filename, $shockurl));
 		
 		
 		#my $new_task = {
