@@ -221,7 +221,12 @@ sub create_and_submit_workflow {
 	
 	my $newtask = new AWE::Task();
 	
-	push(@{$newworkflow->tasks}, $newtask);
+	my $newinput = new AWE::TaskInput();
+	
+	$newtask->addInput($newinput);
+	
+	$newworkflow->addTask($newtask);
+	
 	
 	
 	my $wf_h = $newworkflow->getHash();
