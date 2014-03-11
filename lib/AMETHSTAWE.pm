@@ -8,6 +8,7 @@ use AWE::Job;
 
 use AWE::Workflow;
 use AWE::Task;
+use AWE::TaskInput;
 
 use SHOCK::Client;
 
