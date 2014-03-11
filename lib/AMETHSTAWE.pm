@@ -7,6 +7,7 @@ use AWE::Client;
 use AWE::Job;
 
 use AWE::Workflow;
+use AWE::Task;
 
 use SHOCK::Client;
 
@@ -216,6 +217,11 @@ sub create_and_submit_workflow {
 	
 	
 	my $newworkflow = new AWE::Workflow();
+	
+	
+	my $newtask = new AWE::Task();
+	
+	push(@{$newworkflow->tasks}, $newtask);
 	
 	
 	my $wf_h = $newworkflow->getHash();
