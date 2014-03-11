@@ -73,6 +73,7 @@ deploy-upstart: deploy-service
 	echo "done executing deploy-upstart target"
 
 build-libs:
+	cp impl_code.txt lib/Bio/KBase/AmethstService/AmethstServiceImpl.pm
 	compile_typespec \
 		--psgi $(SERVICE_PSGI)  \
 		--impl Bio::KBase::$(SERVICE_NAME)::$(SERVICE_NAME)Impl \

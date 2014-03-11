@@ -1,16 +1,18 @@
-
-to inserted into
-lib/Bio/KBase/AmethstService/AmethstServiceImpl.pm
+#template for lib/Bio/KBase/AmethstService/AmethstServiceImpl.pm
 
 
 #BEGIN_HEADER
 use AMETHSTAWE;
 #END_HEADER
 
+#BEGIN_CONSTRUCTOR
+#END_CONSTRUCTOR
+
 
 #BEGIN amethst
 	$job_id = AMETHSTAWE::amethst($abundance_matrix, $groups_list, $commands_list, $tree);
 #END amethst
+
 
 #BEGIN status
 	$status = AMETHSTAWE::status($job_id);
@@ -21,6 +23,7 @@ use AMETHSTAWE;
 	$return = AMETHSTAWE::results($job_id);
 #END results
 
-#BEGIN delete
-	$results = AMETHSTAWE::delete($job_id);
-#END delete
+
+#BEGIN delete_job
+	$results = AMETHSTAWE::delete_job($job_id);
+#END delete_job
