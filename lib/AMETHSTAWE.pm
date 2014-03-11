@@ -291,7 +291,7 @@ sub create_and_submit_workflow {
 		
 		
 		
-		print "got:\n $pair_file\n $matrix_file, $group_file, $tree_file\n";
+		print "got:\n $pair_file\n $matrix_file, $group_file\n";
 		
 		
 		
@@ -334,7 +334,7 @@ sub create_and_submit_workflow {
 	my $newtask = new AWE::Task();
 	
 	$newtask->command('compile_p-values-summary_files.pl -g -u');
-	$newtask->dependsOn = \@taskids;
+	$newtask->dependsOn(\@taskids);
 	
 	
 	my $wf_h = $newworkflow->getHash();
