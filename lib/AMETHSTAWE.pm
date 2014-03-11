@@ -9,6 +9,7 @@ use AWE::Job;
 use AWE::Workflow;
 use AWE::Task;
 use AWE::TaskInput;
+use AWE::TaskOutput;
 
 use SHOCK::Client;
 
@@ -299,6 +300,9 @@ sub create_and_submit_workflow {
 		if (defined($tree)) {
 			$newtask->addInput(new AWE::TaskInput('data' => $tree, 'filename' => $tree_file));
 		}
+		
+		
+		
 		
 		
 		#my $new_task = {
