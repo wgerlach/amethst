@@ -22,9 +22,9 @@ use USAGEPOD qw(parse_options);
 
 
 
-my $aweserverurl =  $ENV{'AWE_SERVER_URL'};
+#my $aweserverurl =  $ENV{'AWE_SERVER_URL'};
 my $shockurl =  $ENV{'SHOCK_SERVER_URL'};
-my $clientgroup = $ENV{'AWE_CLIENT_GROUP'};
+#my $clientgroup = $ENV{'AWE_CLIENT_GROUP'};
 
 my $shocktoken=$ENV{'GLOBUSONLINE'} || $ENV{'KB_AUTH_TOKEN'};
 
@@ -65,9 +65,9 @@ if ($h->{'help'} || keys(%$h)==0) {
 }
 
 print "Configuration:\n";
-print "aweserverurl: ".($aweserverurl || 'undef') ."\n";
+#print "aweserverurl: ".($aweserverurl || 'undef') ."\n";
 print "shockurl: ". ($shockurl || 'undef') ."\n";
-print "clientgroup: ". ($clientgroup || 'undef') ."\n\n";
+#print "clientgroup: ". ($clientgroup || 'undef') ."\n\n";
 
 
 my $job_id = undef;
