@@ -273,8 +273,9 @@ sub create_and_submit_workflow {
 	
 	
 	
+	my @taskids = ();
 	
-	# create and sumbit workflows
+	# create and sumbit workflow
 	for (my $i = 0 ; $i < @$tasks_array ; ++$i) {
 		my $task_array = $tasks_array->[$i];
 		
@@ -323,10 +324,19 @@ sub create_and_submit_workflow {
 		
 		
 		#$job_input->{'CMDFILE_'.$i}->{'data'} = $pair_file;
-		
-		$newworkflow->addTask($newtask);
+		my $tid = $newworkflow->addTask($newtask);
+		push(@taskids, $tid);
 	}
 
+	
+	
+	
+	my $newtask = new AWE::Task();
+	
+	$newtask->command('compile_p-values-summary_files.pl -g -u');
+	$newtask->dependsOn = \@taskids;
+	
+	
 	my $wf_h = $newworkflow->getHash();
 	print Dumper($wf_h);
 	exit(0);
