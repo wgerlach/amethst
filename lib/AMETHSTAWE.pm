@@ -249,27 +249,29 @@ sub create_and_submit_workflow {
 	$task_tmpls = decode_json($task_tmpls_json);
 
 	
-	my $amethst_version = 'amethst';
-	if (defined($tree)) {
-		$amethst_version = 'amethst-tree';
-	}
+	#my $amethst_version = 'amethst';
+	#if (defined($tree)) {
+	#	$amethst_version = 'amethst-tree';
+	#}
 
 
 	my $tasks = [];
 	my $job_input = {};
 
-	$job_input->{'ABUNDANCE-MATRIX'}->{'data'} = $abundance_matrix;
-	$job_input->{'GROUPS-LIST'}->{'data'} = $groups_list;
-	if (defined($tree)) {
-		$job_input->{'TREE'}->{'data'} = $tree;
-	}
+	#$job_input->{'ABUNDANCE-MATRIX'}->{'data'} = $abundance_matrix;
+	#$job_input->{'GROUPS-LIST'}->{'data'} = $groups_list;
+	#if (defined($tree)) {
+#		$job_input->{'TREE'}->{'data'} = $tree;
+#	}
 	
 	
 	
 	
 	my $newworkflow = new AWE::Workflow();
 		
-		
+	
+	
+	
 	
 	# create and sumbit workflows
 	for (my $i = 0 ; $i < @$tasks_array ; ++$i) {
@@ -277,10 +279,15 @@ sub create_and_submit_workflow {
 		
 		my ($analysis_filename, $pair_file, $matrix_file, $group_file, $tree_file) = @{$task_array};
 		
-		my $newtask = new AWE::Task();
-		
 		
 		my $input_filename = 'command_'.$i.'.txt';
+		
+		
+		my $newtask = new AWE::Task();
+		
+		$newtask->command('mg-amethst --local -f @'.$input_filename.' -z '.$analysis_filename);
+		
+		
 		
 		print "got:\n $pair_file\n $matrix_file, $group_file, $tree_file\n";
 		
