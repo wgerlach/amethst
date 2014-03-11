@@ -174,7 +174,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	
 	unless (defined($shockurl) && $shockurl ne '') {
 
-		$cfg = new Config::Simple('app.ini');
+		#$cfg = new Config::Simple('app.ini');
 
 		
 	}
