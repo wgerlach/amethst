@@ -46,7 +46,7 @@ my ($h, $help_text) = &parse_options (
 '',
 'other commands:',
 [ 'status|s=s' , 'show status of a given AWE job_id'],
-[ 'results=s' , 'download results for a given AWE job_id'],
+[ 'download|d=s' , 'download results for a given AWE job_id'],
 [ 'delete=s' , 'delete AWE Job (and SHOCK files) for a given AWE job_id'],
 '',
 'only local: (bypasses service)',
@@ -157,12 +157,12 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	print "status: ".$status."\n";
 	
 	
-} elsif (defined $h->{'results'}) {
+} elsif (defined $h->{'download'}) {
 	
 	require Bio::KBase::AmethstService::AmethstServiceImpl;
 	
 	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
-	my $results = $amethst_obj->results($h->{'results'}) || 'undefined';
+	my $results = $amethst_obj->results($h->{'download'}) || 'undefined';
 	
 	print "results: ".Dumper($results)."\n";
 	

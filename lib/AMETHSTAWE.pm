@@ -318,7 +318,7 @@ sub create_and_submit_workflow {
 		die "no shocktoken defined";
 	}
 	#upload job input files
-	print "job_input: ". Dumper(keys(%$job_input))."\n";
+	#print "job_input: ". Dumper(keys(%$job_input))."\n";
 	$shock->upload_temporary_files($job_input);
 
 
