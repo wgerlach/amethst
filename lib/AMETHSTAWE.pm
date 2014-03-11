@@ -337,6 +337,8 @@ sub create_and_submit_workflow {
 	$newtask->dependsOn(\@taskids);
 	
 	
+	$newworkflow->addTask($newtask);
+	
 	my $wf_h = $newworkflow->getHash();
 	print Dumper($wf_h);
 	exit(0);
