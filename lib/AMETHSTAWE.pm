@@ -217,22 +217,8 @@ sub create_and_submit_workflow {
 	
 	
 	
-	my $newworkflow = new AWE::Workflow();
 	
 	
-	my $newtask = new AWE::Task();
-	
-	my $newinput = new AWE::TaskInput();
-	
-	$newtask->addInput($newinput);
-	
-	$newworkflow->addTask($newtask);
-	
-	
-	
-	my $wf_h = $newworkflow->getHash();
-	print Dumper($wf_h);
-	exit(0);
 	
 	############################################
 	# connect to AWE server and check the clients
@@ -278,11 +264,20 @@ sub create_and_submit_workflow {
 		$job_input->{'TREE'}->{'data'} = $tree;
 	}
 	
+	
+	
+	
+	my $newworkflow = new AWE::Workflow();
+		
+		
+	
 	# create and sumbit workflows
 	for (my $i = 0 ; $i < @$tasks_array ; ++$i) {
-		my $task_array = $tasks_array->[$i];
+		#my $task_array = $tasks_array->[$i];
 		
 		my ($analysis_filename, $pair_file, $matrix_file, $group_file, $tree_file) = @{$task_array};
+		
+		my $newtask = new AWE::Task();
 		
 		
 		my $input_filename = 'command_'.$i.'.txt';
@@ -290,28 +285,41 @@ sub create_and_submit_workflow {
 		print "got:\n $pair_file\n $matrix_file, $group_file, $tree_file\n";
 		
 		
-		my $new_task = {
-			"task_id" => "amethst_".$i,
-			"task_template" => $amethst_version,
-			"CMDFILE" => ["shock", "[CMDFILE_$i]", $input_filename],
-			"ABUNDANCE-MATRIX" => ["shock", "[ABUNDANCE-MATRIX]", $matrix_file],
-			"GROUPS-LIST" => ["shock", "[GROUPS-LIST]", $group_file],
-			"OUTPUT" => $analysis_filename
-		};
-		if ( defined($tree) ) {
-			$new_task->{'TREE'} = ["shock", "[TREE]", $tree_file];
+		
+		$newtask->addInput(new AWE::TaskInput('data' => $pair_file, 'filename' => $input_filename));
+		$newtask->addInput(new AWE::TaskInput('data' => $abundance_matrix, 'filename' => $matrix_file));
+		$newtask->addInput(new AWE::TaskInput('data' => $groups_list, 'filename' => $group_file));
+		if (defined($tree)) {
+			$newtask->addInput(new AWE::TaskInput('data' => $tree, 'filename' => $tree_file));
 		}
 		
-		push (@{$tasks}, $new_task );
+		
+		#my $new_task = {
+		#	"task_id" => "amethst_".$i,
+		#	"task_template" => $amethst_version,
+		#	"CMDFILE" => ["shock", "[CMDFILE_$i]", $input_filename],
+		#	"ABUNDANCE-MATRIX" => ["shock", "[ABUNDANCE-MATRIX]", $matrix_file],
+		#	"GROUPS-LIST" => ["shock", "[GROUPS-LIST]", $group_file],
+		#	"OUTPUT" => $analysis_filename
+		#};
+		#if ( defined($tree) ) {
+		#	$new_task->{'TREE'} = ["shock", "[TREE]", $tree_file];
+		#}
+		
+		#push (@{$tasks}, $new_task );
 		
 		
 		
 		
-		$job_input->{'CMDFILE_'.$i}->{'data'} = $pair_file;
+		#$job_input->{'CMDFILE_'.$i}->{'data'} = $pair_file;
 		
-		
+		$newworkflow->addTask($newtask);
 	}
 
+	my $wf_h = $newworkflow->getHash();
+	print Dumper($wf_h);
+	exit(0);
+	
 #compile_p-values-summary_files.pl -g -u
 	
 	
