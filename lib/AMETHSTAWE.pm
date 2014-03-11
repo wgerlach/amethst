@@ -302,7 +302,7 @@ sub create_and_submit_workflow {
 		}
 		
 		
-		
+		$newtask->addOutput(new AWE::TaskOutput($analysis_filename, 'host'));
 		
 		
 		#my $new_task = {
