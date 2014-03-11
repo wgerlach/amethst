@@ -215,10 +215,10 @@ sub create_and_submit_workflow {
 	
 	
 	
-	my $workflow = new AWE::Workflow();
+	my $newworkflow = new AWE::Workflow();
 	
 	
-	my $wf_h = $workflow->getHash();
+	my $wf_h = $newworkflow->getHash();
 	print Dumper($wf_h);
 	exit(0);
 	
