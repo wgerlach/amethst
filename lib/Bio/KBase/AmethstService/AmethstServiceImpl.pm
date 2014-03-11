@@ -249,9 +249,9 @@ sub results
 
 
 
-=head2 delete
+=head2 delete_job
  
- $results = $obj->delete($job_id)
+ $results = $obj->delete_job($job_id)
  
  =over 4
  
@@ -293,25 +293,25 @@ sub delete_job
     my @_bad_arguments;
     (!ref($job_id)) or push(@_bad_arguments, "Invalid type for argument \"job_id\" (value was \"$job_id\")");
     if (@_bad_arguments) {
-		my $msg = "Invalid arguments passed to delete:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+		my $msg = "Invalid arguments passed to delete_job:\n" . join("", map { "\t$_\n" } @_bad_arguments);
 		Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-		method_name => 'delete');
+		method_name => 'delete_job');
     }
 	
     my $ctx = $Bio::KBase::AmethstService::Service::CallContext;
     my($results);
-    #BEGIN delete
+    #BEGIN delete_job
 	print "job_id: $job_id\n";
 	$results = AMETHSTAWE::delete_job($job_id);
 	require Data::Dumper;
 	print "results: ".Dumper($results)."\n";
-    #END delete
+    #END delete_job
     my @_bad_returns;
     (!ref($results)) or push(@_bad_returns, "Invalid type for return variable \"results\" (value was \"$results\")");
     if (@_bad_returns) {
-		my $msg = "Invalid returns passed to delete:\n" . join("", map { "\t$_\n" } @_bad_returns);
+		my $msg = "Invalid returns passed to delete_job:\n" . join("", map { "\t$_\n" } @_bad_returns);
 		Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-		method_name => 'delete');
+		method_name => 'delete_job');
     }
     return($results);
 }
