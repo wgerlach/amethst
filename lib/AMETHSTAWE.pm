@@ -281,6 +281,7 @@ sub create_and_submit_workflow {
 	
 	
 	my @taskids = ();
+	my @summary_inputs=();
 	
 	# create and sumbit workflow
 	for (my $i = 0 ; $i < @$tasks_array ; ++$i) {
@@ -294,7 +295,7 @@ sub create_and_submit_workflow {
 		
 		my $newtask = new AWE::Task();
 		
-		$newtask->command('mg-amethst --local -f @'.$input_filename.' -z '.$analysis_filename);
+		$newtask->command('mg-amethst -f @'.$input_filename.' -z '.$analysis_filename);
 		
 		
 		
@@ -310,7 +311,8 @@ sub create_and_submit_workflow {
 		}
 		
 		
-		$newtask->addOutput(new AWE::TaskOutput($analysis_filename, $shockurl));
+		my $output = $newtask->addOutput(new AWE::TaskOutput($analysis_filename, $shockurl));
+		push (@summary_inputs, new AWE::TaskInput('reference' => $output));
 		
 		
 		#my $new_task = {
@@ -340,12 +342,9 @@ sub create_and_submit_workflow {
 	
 	my $newtask = new AWE::Task();
 	
-	$newtask->command('compile_p-values-summary_files.pl -g -u');
+	$newtask->command('mg-amethst --summary');
 	
-	
-	
-	$newtask->dependsOn(\@taskids);
-	
+	$newtask->addInput(@summary_inputs);
 	
 	$newworkflow->addTask($newtask);
 	
