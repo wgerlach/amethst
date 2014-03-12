@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 
-use Config::IniFiles;
+use Config::Simple;
 use File::Slurp;
 use JSON;
 use File::Basename;
@@ -98,11 +98,11 @@ sub readConfig {
 	}
 	
 	
-	my $cfg = Config::IniFiles->new( -file => $conf_file );
-	
+	my $cfg_full = Config::Simple->new($conf_file );
+	$cfg = $cfg_full->param(-block=>'AmethstService');
 	
 	unless (defined $self->{'aweserverurl'} && $self->{'aweserverurl'} ne '') {
-		$self->{'aweserverurl'} =  $cfg->val( 'AmethstService', 'awe-server' );
+		$self->{'aweserverurl'} =  $cfg->param('awe-server' );
 		
 		unless (defined($self->{'aweserverurl'}) && $self->{'aweserverurl'} ne "") {
 			die "awe-server not found in config";
@@ -110,7 +110,7 @@ sub readConfig {
 	}
 	
 	unless (defined $self->{'shockurl'} && defined $self->{'shockurl'} ne '') {
-		$self->{'shockurl'} =  $cfg->val( 'AmethstService', 'shock-server' );
+		$self->{'shockurl'} =  $cfg->param('shock-server' );
 		
 		unless (defined(defined $self->{'shockurl'}) && defined $self->{'shockurl'} ne "") {
 			die "shock-server not found in config";
@@ -118,7 +118,7 @@ sub readConfig {
 	}
 	
 	unless (defined $self->{'clientgroup'} && $self->{'clientgroup'} ne '') {
-		$self->{'clientgroup'} =  $cfg->val( 'AmethstService', 'clientgroup' );
+		$self->{'clientgroup'} =  $cfg->param('clientgroup');
 		
 		unless (defined($self->{'clientgroup'}) && $self->{'clientgroup'} ne "") {
 			die "clientgroup not found in config";

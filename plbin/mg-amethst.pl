@@ -7,7 +7,7 @@ use FindBin;
 use lib $FindBin::Bin;
 
 use File::Slurp;
-use Config::IniFiles;
+use Config::Simple;
 use Data::Dumper;
 
 
@@ -205,9 +205,10 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 		}
 		
 		
-		my $cfg = Config::IniFiles->new( -file => $conf_file );
+		my $cfg_full = Config::Simple->new($conf_file );
+		$cfg = $cfg_full->param(-block=>'AmethstService');
 		
-		$shockurl =  $cfg->val( 'AmethstService', 'shock-server' );
+		$shockurl =  $cfg->param('shock-server' );
 		
 		unless (defined($shockurl) && $shockurl ne "") {
 			die "shockurl not found in config";
