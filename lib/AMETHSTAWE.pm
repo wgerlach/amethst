@@ -24,7 +24,7 @@ use AWE::TaskOutput;
 
 
 
-
+1;
 
 # new AMETHSTAWE('shocktoken' => <token>)
 sub new {
@@ -451,3 +451,4 @@ sub delete_job {
 	return "not deleted";
 	
 }
+
