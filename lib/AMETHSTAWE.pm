@@ -303,11 +303,11 @@ sub create_and_submit_workflow {
 		
 		
 		
-		$newtask->addInput(new AWE::TaskInput('data' => $pair_file, 'filename' => $input_filename));
-		$newtask->addInput(new AWE::TaskInput('data' => $abundance_matrix, 'filename' => $matrix_file));
-		$newtask->addInput(new AWE::TaskInput('data' => $groups_list, 'filename' => $group_file));
+		$newtask->addInput(new AWE::TaskInput('data' => $$pair_file, 'filename' => $input_filename));
+		$newtask->addInput(new AWE::TaskInput('data' => $$abundance_matrix, 'filename' => $matrix_file));
+		$newtask->addInput(new AWE::TaskInput('data' => $$groups_list, 'filename' => $group_file));
 		if (defined($tree)) {
-			$newtask->addInput(new AWE::TaskInput('data' => $tree, 'filename' => $tree_file));
+			$newtask->addInput(new AWE::TaskInput('data' => $$tree, 'filename' => $tree_file));
 		}
 		
 		
