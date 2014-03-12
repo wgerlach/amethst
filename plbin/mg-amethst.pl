@@ -7,19 +7,15 @@ use FindBin;
 use lib $FindBin::Bin;
 
 use File::Slurp;
-use Config::Simple;
-
-#use AWE::Client;
-#use AWE::Job;
-#use SHOCK::Client;
-
-#use JSON;
-#use File::Basename;
+use Config::IniFiles;
 use Data::Dumper;
 
-#use AMETHSTAWE; only for direct
 
+use SHOCK::Client; # needed for download of results from shock
 use USAGEPOD qw(parse_options);
+
+
+
 
 
 
@@ -193,12 +189,23 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 		}
 	}
 	
-	require SHOCK::Client;
+	
 	
 	unless (defined($shockurl) && $shockurl ne '') {
 
-		#$cfg = new Config::Simple('app.ini');
-
+		my $conf_file = $ENV{'KB_TOP'}.'/deployment.cfg';
+		unless (-e $conf_file) {
+			die "error: deployment.cfg not found ($conf_file)";
+		}
+		
+		
+		my $cfg = Config::IniFiles->new( -file => $conf_file );
+		
+		$shockurl =  $cfg->val( 'AmethstService', 'shock-server' );
+		
+		unless (defined($shockurl) && $shockurl ne "") {
+			die "shockurl not found in config";
+		}
 		
 	}
 	

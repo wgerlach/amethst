@@ -3,6 +3,15 @@ package AMETHSTAWE;
 use strict;
 use warnings;
 
+
+use Config::IniFiles;
+use File::Slurp;
+use JSON;
+use File::Basename;
+
+use Data::Dumper;
+
+
 use AWE::Client;
 use AWE::Job;
 
@@ -14,11 +23,6 @@ use AWE::TaskOutput;
 use SHOCK::Client;
 
 
-use File::Slurp;
-use JSON;
-use File::Basename;
-
-use Data::Dumper;
 
 
 
@@ -45,6 +49,40 @@ my $task_tmpls_json = <<EOF;
 EOF
 
 
+sub readConfig {
+	my $conf_file = $ENV{'KB_TOP'}.'/deployment.cfg';
+	unless (-e $conf_file) {
+		die "error: deployment.cfg not found ($conf_file)";
+	}
+	
+	
+	my $cfg = Config::IniFiles->new( -file => $conf_file );
+	
+	
+	unless (defined $aweserverurl && $aweserverurl ne '') {
+		$aweserverurl =  $cfg->val( 'AmethstService', 'awe-server' );
+		
+		unless (defined($aweserverurl) && $aweserverurl ne "") {
+			die "awe-server not found in config";
+		}
+	}
+	
+	unless (defined $shockurl && $shockurl ne '') {
+		$shockurl =  $cfg->val( 'AmethstService', 'shock-server' );
+		
+		unless (defined($shockurl) && $shockurl ne "") {
+			die "shock-server not found in config";
+		}
+	}
+	
+	unless (defined $clientgroup && $clientgroup ne '') {
+		$clientgroup =  $cfg->val( 'AmethstService', 'clientgroup' );
+		
+		unless (defined($clientgroup) && $clientgroup ne "") {
+			die "clientgroup not found in config";
+		}
+	}
+}
 
 
 # this is string-only version
