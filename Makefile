@@ -27,7 +27,7 @@ SRC_PERL = $(wildcard plbin/*.pl)
 deploy: deploy-client deploy-service
 
 
-deploy-all: initialize  deploy-client deploy-service
+deploy-all: initialize deploy-client deploy-service
 
 
 deploy-client: deploy-libs deploy-scripts
@@ -64,6 +64,7 @@ deploy-service: deploy-cfg
 	cp -r AMETHST $(TARGET)/services/$(SERVICE_DIR)/
 	echo "done executing deploy-service target"
 
+.PHONY : initialize
 initialize:
 	git submodule init
 	git submodule update
