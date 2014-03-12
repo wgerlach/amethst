@@ -311,8 +311,8 @@ sub create_and_submit_workflow {
 		}
 		
 		
-		my $output = $newtask->addOutput(new AWE::TaskOutput($analysis_filename, $shockurl));
-		push (@summary_inputs, new AWE::TaskInput('reference' => $output));
+		my $output_reference = $newtask->addOutput(new AWE::TaskOutput($analysis_filename, $shockurl));
+		push (@summary_inputs, new AWE::TaskInput('reference' => $output_reference));
 		
 		
 		#my $new_task = {
