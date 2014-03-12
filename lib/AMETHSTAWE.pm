@@ -107,7 +107,7 @@ sub readConfig {
 	}
 	
 	unless (defined $self->{'shockurl'} && defined $self->{'shockurl'} ne '') {
-		defined $self->{'shockurl'} =  $cfg->val( 'AmethstService', 'shock-server' );
+		$self->{'shockurl'} =  $cfg->val( 'AmethstService', 'shock-server' );
 		
 		unless (defined(defined $self->{'shockurl'}) && defined $self->{'shockurl'} ne "") {
 			die "shock-server not found in config";
