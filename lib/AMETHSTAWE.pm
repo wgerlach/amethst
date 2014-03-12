@@ -45,10 +45,13 @@ sub new {
 	};
 	
 	
-	$self->readConfig();
+	
 	
     bless $self, $class;
-    return $self;
+    
+	$self->readConfig();
+	
+	return $self;
 }
 
 
