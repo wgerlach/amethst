@@ -343,7 +343,7 @@ sub create_and_submit_workflow {
 	my $prefix = 'compiled.P_VALUES_SUMMARIES.';
 	my @output_suffixes = ('scaled_avg_dist', 'raw_avg_dist_stdev','raw_avg_dist','p_values','num_perm');
 	foreach my $suffix (@output_suffixes) {
-		$newtask->addOutput(new TaskOutput($prefix.$suffix, $self->shockurl));
+		$newtask->addOutput(new AWE::TaskOutput($prefix.$suffix, $self->shockurl));
 	}
 	
 	
