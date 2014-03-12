@@ -26,11 +26,48 @@ use SHOCK::Client;
 
 
 
-my $aweserverurl =  $ENV{'AWE_SERVER_URL'} || die "AWE_SERVER_URL not defined";
-my $shockurl =  $ENV{'SHOCK_SERVER_URL'} || die "SHOCK_SERVER_URL not defined";
-my $clientgroup = $ENV{'AWE_CLIENT_GROUP'} || die "AWE_CLIENT_GROUP not defined";
+#my $aweserverurl =  $ENV{'AWE_SERVER_URL'} || die "AWE_SERVER_URL not defined";
+#my $shockurl =  $ENV{'SHOCK_SERVER_URL'} || die "SHOCK_SERVER_URL not defined";
+#my $clientgroup = $ENV{'AWE_CLIENT_GROUP'} || die "AWE_CLIENT_GROUP not defined";
 
-my $shocktoken=$ENV{'GLOBUSONLINE'} || $ENV{'KB_AUTH_TOKEN'} || die "KB_AUTH_TOKEN not defined";
+#my $shocktoken=$ENV{'GLOBUSONLINE'} || $ENV{'KB_AUTH_TOKEN'} || die "KB_AUTH_TOKEN not defined";
+
+# new AMETHSTAWE('shocktoken' => <token>)
+sub new {
+    my ($class, %h) = @_;
+    
+	
+    my $self = {
+		aweserverurl	=> $ENV{'AWE_SERVER_URL'} ,
+		shockurl		=> $ENV{'SHOCK_SERVER_URL'},
+		clientgroup		=> $ENV{'AWE_CLIENT_GROUP'},
+		shocktoken		=> $h{'shocktoken'} || $ENV{'GLOBUSONLINE'} || $ENV{'KB_AUTH_TOKEN'} || die "KB_AUTH_TOKEN not defined";
+	};
+	
+	
+	$self->readConfig();
+	
+    bless $self, $class;
+    return $self;
+}
+
+
+sub aweserverurl {
+    my ($self) = @_;
+    return $self->{aweserverurl};
+}
+sub shockurl {
+    my ($self) = @_;
+    return $self->{shockurl};
+}
+sub clientgroup {
+    my ($self) = @_;
+    return $self->{clientgroup};
+}
+sub shocktoken {
+    my ($self) = @_;
+    return $self->{shocktoken};
+}
 
 
 my $task_tmpls_json = <<EOF;
@@ -50,6 +87,8 @@ EOF
 
 
 sub readConfig {
+	my ($self) = @_;
+	
 	my $conf_file = $ENV{'KB_TOP'}.'/deployment.cfg';
 	unless (-e $conf_file) {
 		die "error: deployment.cfg not found ($conf_file)";
@@ -59,26 +98,26 @@ sub readConfig {
 	my $cfg = Config::IniFiles->new( -file => $conf_file );
 	
 	
-	unless (defined $aweserverurl && $aweserverurl ne '') {
-		$aweserverurl =  $cfg->val( 'AmethstService', 'awe-server' );
+	unless (defined $self->{'aweserverurl'} && $self->{'aweserverurl'} ne '') {
+		$self->{'aweserverurl'} =  $cfg->val( 'AmethstService', 'awe-server' );
 		
-		unless (defined($aweserverurl) && $aweserverurl ne "") {
+		unless (defined($self->{'aweserverurl'}) && $self->{'aweserverurl'} ne "") {
 			die "awe-server not found in config";
 		}
 	}
 	
-	unless (defined $shockurl && $shockurl ne '') {
-		$shockurl =  $cfg->val( 'AmethstService', 'shock-server' );
+	unless (defined $self->{'shockurl'} && defined $self->{'shockurl'} ne '') {
+		defined $self->{'shockurl'} =  $cfg->val( 'AmethstService', 'shock-server' );
 		
-		unless (defined($shockurl) && $shockurl ne "") {
+		unless (defined(defined $self->{'shockurl'}) && defined $self->{'shockurl'} ne "") {
 			die "shock-server not found in config";
 		}
 	}
 	
-	unless (defined $clientgroup && $clientgroup ne '') {
-		$clientgroup =  $cfg->val( 'AmethstService', 'clientgroup' );
+	unless (defined $self->{'clientgroup'} && $self->{'clientgroup'} ne '') {
+		$self->{'clientgroup'} =  $cfg->val( 'AmethstService', 'clientgroup' );
 		
-		unless (defined($clientgroup) && $clientgroup ne "") {
+		unless (defined($self->{'clientgroup'}) && $self->{'clientgroup'} ne "") {
 			die "clientgroup not found in config";
 		}
 	}
@@ -87,18 +126,18 @@ sub readConfig {
 
 # this is string-only version
 sub amethst {
-	my ($abundance_matrix, $groups_list, $commands_list, $tree) = @_;
+	my ($self, $abundance_matrix, $groups_list, $commands_list, $tree) = @_;
 	
 	print STDERR "this is sub amethst \n";
 	system("echo huhu > /home/ubuntu/test.log");
 	
-	return amethst_main(\$abundance_matrix, \$groups_list, \$commands_list, \$tree);
+	return $self->amethst_main(\$abundance_matrix, \$groups_list, \$commands_list, \$tree);
 }
 
 
 # scalars argument are treated as filenames, references to scalars as data in memory
 sub amethst_main {
-	my ($abundance_matrix, $groups_list, $commands_list, $tree) = @_;
+	my ($self, $abundance_matrix, $groups_list, $commands_list, $tree) = @_;
 	
 	
 	if (defined $tree && $tree eq '') {
@@ -192,13 +231,13 @@ sub amethst_main {
 		}
 	}
 
-	return create_and_submit_workflow($tasks_array, $am_data, $grp_data, $tree_data);
+	return $self->create_and_submit_workflow($tasks_array, $am_data, $grp_data, $tree_data);
 
 
 }
 
 sub process_pair {
-	my ($cmd1, $cmd2, $sum_cmd) = @_;
+	my ($self, $cmd1, $cmd2, $sum_cmd) = @_;
 	
 	
 	my ($matrix_file) = $cmd1 =~ /-f\s+(\S+)/;
@@ -247,8 +286,7 @@ sub process_pair {
 
 
 sub create_and_submit_workflow {
-
-	my ($tasks_array, $abundance_matrix, $groups_list, $tree) = @_;
+	my ($self, $tasks_array, $abundance_matrix, $groups_list, $tree) = @_;
 	
 	if (@$tasks_array == 0) {
 		die "error: tasks_array empty";
@@ -262,19 +300,19 @@ sub create_and_submit_workflow {
 	############################################
 	# connect to AWE server and check the clients
 
-	my $awe = new AWE::Client($aweserverurl, $shocktoken);
+	my $awe = new AWE::Client($self->aweserverurl, $self->shocktoken);
 	unless (defined $awe) {
 		die;
 	}
 
-	$awe->checkClientGroup($clientgroup)==0 || die;
+	$awe->checkClientGroup($self->clientgroup)==0 || die;
 
 
 	############################################
 	#connect to SHOCK server
 
 	print "connect to SHOCK\n";
-	my $shock = new SHOCK::Client($shockurl, $shocktoken); # shock production
+	my $shock = new SHOCK::Client($self->shockurl, $self->shocktoken); # shock production
 	unless (defined $shock) {
 		die;
 	}
@@ -311,7 +349,7 @@ sub create_and_submit_workflow {
 		"name"=> "amethst",
 		"project"=> "amethst",
 		"user"=> "kbase-user",
-		"clientgroups"=> $clientgroup,
+		"clientgroups"=> $self->clientgroup,
 		"noretry"=> JSON::true
 	);
 		
@@ -349,7 +387,7 @@ sub create_and_submit_workflow {
 		}
 		
 		
-		my $output_reference = $newtask->addOutput(new AWE::TaskOutput($analysis_filename, $shockurl));
+		my $output_reference = $newtask->addOutput(new AWE::TaskOutput($analysis_filename, $self->shockurl));
 		push (@summary_inputs, new AWE::TaskInput('reference' => $output_reference));
 		
 		
@@ -374,12 +412,12 @@ sub create_and_submit_workflow {
 	print "AWE job without input:\n".$json->pretty->encode( $newworkflow->getHash() )."\n";
 	
 	
-	$shocktoken || die "no shocktoken defined";
-	if ($shocktoken eq '') {
+	$self->shocktoken || die "no shocktoken defined";
+	if ($self->shocktoken eq '') {
 		die "no shocktoken defined";
 	}
 	
-	$newworkflow->shock_upload($shockurl, $shocktoken);
+	$newworkflow->shock_upload($self->shockurl, $self->shocktoken);
 	
 	print "AWE job with input:\n".$json->pretty->encode( $newworkflow->getHash() )."\n";
 #exit(0);
@@ -411,9 +449,9 @@ sub create_and_submit_workflow {
 }
 
 sub status {
-	my ($job_id) = @_;
+	my ($self, $job_id) = @_;
 	
-	my $awe = new AWE::Client($aweserverurl, $shocktoken);
+	my $awe = new AWE::Client($self->aweserverurl, $self->shocktoken);
 	unless (defined $awe) {
 		die;
 	}
@@ -426,9 +464,9 @@ sub status {
 }
 
 sub results {
-	my ($job_id) = @_;
+	my ($self, $job_id) = @_;
 	
-	my $awe = new AWE::Client($aweserverurl, $shocktoken);
+	my $awe = new AWE::Client($self->aweserverurl, $self->shocktoken);
 	unless (defined $awe) {
 		die;
 	}
@@ -470,14 +508,14 @@ sub results {
 
 # this will delete shock nodes only when they have the "temporary" attribute
 sub delete_job {
-	my ($job_id) = @_;
+	my ($self, $job_id) = @_;
 	
-	my $awe = new AWE::Client($aweserverurl, $shocktoken);
+	my $awe = new AWE::Client($self->aweserverurl, $self->shocktoken);
 	unless (defined $awe) {
 		die;
 	}
 	
-	my $shock = new SHOCK::Client($shockurl, $shocktoken); # shock production
+	my $shock = new SHOCK::Client($self->shockurl, $self->shocktoken); # shock production
 	unless (defined $shock) {
 		die;
 	}

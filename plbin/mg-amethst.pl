@@ -72,6 +72,7 @@ my ($h, $help_text) = &parse_options (
 [ 'groups|g=s',  "groups file" ],
 [ 'commands|c=s',  "commands file" ],
 [ 'tree|t=s',  "tree (optional)" ],
+[ 'token=s',  "shock token" ],
 '',
 'other commands:',
 [ 'status|s=s' , 'show status of a given AWE job_id'],
@@ -92,6 +93,11 @@ my ($h, $help_text) = &parse_options (
 if ($h->{'help'} || keys(%$h)==0) {
 	print $help_text;
 	exit(0);
+}
+
+
+if (defined $h->{'token'}) {
+	$shocktoken = $h->{'token'};
 }
 
 
@@ -150,7 +156,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 		$tree_data = read_file($h->{'tree'});
 	}
 	
-	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
+	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl('shocktoken' => $shocktoken);
 	
 	
 	$job_id = $amethst_obj->amethst($abundance_matrix_data, $groups_list_data, $commands_list_data, $tree_data);
@@ -166,7 +172,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	
 	require Bio::KBase::AmethstService::AmethstServiceImpl;
 	
-	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
+	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl('shocktoken' => $shocktoken);
 	my $status = $amethst_obj->status($h->{'status'}) || 'undefined';
 
 	print "status: ".$status."\n";
@@ -176,7 +182,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	
 	require Bio::KBase::AmethstService::AmethstServiceImpl;
 	
-	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
+	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl('shocktoken' => $shocktoken);
 	my $results = $amethst_obj->results($h->{'download'}) || 'undefined';
 	
 	print "results: ".Dumper($results)."\n";
@@ -229,7 +235,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 
 	require Bio::KBase::AmethstService::AmethstServiceImpl;
 	
-	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl;
+	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl('shocktoken' => $shocktoken);
 
 	my $delete_status = $amethst_obj->delete_job($h->{'delete'}) || 'undefined';
 	
