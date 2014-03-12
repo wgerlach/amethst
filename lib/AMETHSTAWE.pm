@@ -99,7 +99,7 @@ sub readConfig {
 	
 	
 	my $cfg_full = Config::Simple->new($conf_file );
-	$cfg = $cfg_full->param(-block=>'AmethstService');
+	my $cfg = $cfg_full->param(-block=>'AmethstService');
 	
 	unless (defined $self->{'aweserverurl'} && $self->{'aweserverurl'} ne '') {
 		$self->{'aweserverurl'} =  $cfg->param('awe-server' );
