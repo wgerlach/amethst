@@ -12,6 +12,8 @@ use File::Basename;
 use Data::Dumper;
 
 
+use SHOCK::Client;
+
 use AWE::Client;
 use AWE::Job;
 
@@ -20,17 +22,9 @@ use AWE::Task;
 use AWE::TaskInput;
 use AWE::TaskOutput;
 
-use SHOCK::Client;
 
 
 
-
-
-#my $aweserverurl =  $ENV{'AWE_SERVER_URL'} || die "AWE_SERVER_URL not defined";
-#my $shockurl =  $ENV{'SHOCK_SERVER_URL'} || die "SHOCK_SERVER_URL not defined";
-#my $clientgroup = $ENV{'AWE_CLIENT_GROUP'} || die "AWE_CLIENT_GROUP not defined";
-
-#my $shocktoken=$ENV{'GLOBUSONLINE'} || $ENV{'KB_AUTH_TOKEN'} || die "KB_AUTH_TOKEN not defined";
 
 # new AMETHSTAWE('shocktoken' => <token>)
 sub new {
@@ -41,7 +35,7 @@ sub new {
 		aweserverurl	=> $ENV{'AWE_SERVER_URL'} ,
 		shockurl		=> $ENV{'SHOCK_SERVER_URL'},
 		clientgroup		=> $ENV{'AWE_CLIENT_GROUP'},
-		shocktoken		=> $h{'shocktoken'} || $ENV{'GLOBUSONLINE'} || $ENV{'KB_AUTH_TOKEN'} || die "KB_AUTH_TOKEN not defined"
+		shocktoken		=> $h{'shocktoken'} || $ENV{'GLOBUSONLINE'} || $ENV{'KB_AUTH_TOKEN'}
 	};
 	
 	
@@ -71,23 +65,6 @@ sub shocktoken {
     my ($self) = @_;
     return $self->{shocktoken};
 }
-
-
-my $task_tmpls_json = <<EOF;
-{
-	"amethst" : {
-		"cmd" : "mg-amethst --local -f @[CMDFILE] -z [OUTPUT]",
-		"inputs" : ["[CMDFILE]", "[ABUNDANCE-MATRIX]", "[GROUPS-LIST]"],
-		"outputs" : ["[OUTPUT]"]
-	},
-	"amethst-tree" : {
-		"cmd" : "mg-amethst --local -f @[CMDFILE] -z [OUTPUT]",
-		"inputs" : ["[CMDFILE]", "[ABUNDANCE-MATRIX]", "[GROUPS-LIST]", "[TREE]"],
-		"outputs" : ["[OUTPUT]"]
-	}
-}
-EOF
-
 
 sub readConfig {
 	my ($self) = @_;
@@ -128,18 +105,18 @@ sub readConfig {
 
 
 # this is string-only version
-sub amethst {
+sub amethst_string {
 	my ($self, $abundance_matrix, $groups_list, $commands_list, $tree) = @_;
 	
 	print STDERR "this is sub amethst \n";
 	system("echo huhu > /home/ubuntu/test.log");
 	
-	return $self->amethst_main(\$abundance_matrix, \$groups_list, \$commands_list, \$tree);
+	return $self->amethst(\$abundance_matrix, \$groups_list, \$commands_list, \$tree);
 }
 
 
-# scalars argument are treated as filenames, references to scalars as data in memory
-sub amethst_main {
+# scalars argument are treated as filenames, references to scalars are treated as data in memory
+sub amethst {
 	my ($self, $abundance_matrix, $groups_list, $commands_list, $tree) = @_;
 	
 	
@@ -162,6 +139,7 @@ sub amethst_main {
 	
 	my $tasks_array=[];
 	
+	#commands file is split into smaller pieces
 	open (CMD_SOURCE, '<', $commands_list) or die $!;
 	while (my $line = <CMD_SOURCE>) {
 		
@@ -285,7 +263,10 @@ sub create_and_submit_workflow {
 	}
 	
 	
-	
+	$self->shocktoken || die "no shocktoken defined"; # required for upload
+	if ($self->shocktoken eq '') {
+		die "no shocktoken defined";
+	}
 	
 	
 	
@@ -300,24 +281,9 @@ sub create_and_submit_workflow {
 	$awe->checkClientGroup($self->clientgroup)==0 || die;
 
 
-	############################################
-	#connect to SHOCK server
-
-	print "connect to SHOCK\n";
-	my $shock = new SHOCK::Client($self->shockurl, $self->shocktoken); # shock production
-	unless (defined $shock) {
-		die;
-	}
-
-
-
-
-
-
-
-
 	
-	my $newworkflow = new AWE::Workflow(
+	# workflow document: parameters define go into the "info" section of the AWE Job
+	my $workflow = new AWE::Workflow(
 		"pipeline"=> "amethst",
 		"name"=> "amethst",
 		"project"=> "amethst",
@@ -329,10 +295,10 @@ sub create_and_submit_workflow {
 	
 	
 	
-	my @taskids = ();
+	
 	my @summary_inputs=();
 	
-	# create and sumbit workflow
+	
 	for (my $i = 0 ; $i < @$tasks_array ; ++$i) {
 		my $task_array = $tasks_array->[$i];
 		
@@ -341,8 +307,8 @@ sub create_and_submit_workflow {
 		
 		my $input_filename = 'command_'.$i.'.txt';
 		
-		
-		my $newtask = new AWE::Task();
+		#create and add a new task
+		my $newtask = $workflow->addTask(new AWE::Task());
 		
 		$newtask->command('mg-amethst -f @'.$input_filename.' -z '.$analysis_filename);
 		
@@ -351,61 +317,54 @@ sub create_and_submit_workflow {
 		print "got:\n $pair_file\n $matrix_file, $group_file\n";
 		
 		
-		
-		$newtask->addInput(new AWE::TaskInput('data' => \$pair_file, 'filename' => $input_filename));
+		# define and add input nodes to the task
+		$newtask->addInput(new AWE::TaskInput('data' => \$pair_file,		'filename' => $input_filename));
 		$newtask->addInput(new AWE::TaskInput('data' => \$abundance_matrix, 'filename' => $matrix_file));
-		$newtask->addInput(new AWE::TaskInput('data' => \$groups_list, 'filename' => $group_file));
+		$newtask->addInput(new AWE::TaskInput('data' => \$groups_list,		'filename' => $group_file));
 		if (defined($tree)) {
 			$newtask->addInput(new AWE::TaskInput('data' => \$tree, 'filename' => $tree_file));
 		}
 		
-		
+		# define and add output nodes to the task; return value is a reference that can be used to create an input node for the next task
 		my $output_reference = $newtask->addOutput(new AWE::TaskOutput($analysis_filename, $self->shockurl));
 		push (@summary_inputs, new AWE::TaskInput('reference' => $output_reference));
 		
 		
-	
-		my $tid = $newworkflow->addTask($newtask);
-		push(@taskids, $tid);
 	}
 
 	
-	# last summary task
-	
-	my $newtask = new AWE::Task();
+	# create and add last summary task
+	my $newtask = $workflow->addTask(new AWE::Task());
 	
 	$newtask->command('mg-amethst --summary');
-	$newtask->addInput(@summary_inputs);
-	$newworkflow->addTask($newtask);
+	$newtask->addInput(@summary_inputs); # these input nodes connect this task with the previous tasks
+	
 	
 		
 	
 
 	my $json = JSON->new;
-	print "AWE job without input:\n".$json->pretty->encode( $newworkflow->getHash() )."\n";
+	print "AWE job without input:\n".$json->pretty->encode( $workflow->getHash() )."\n";
 	
 	
-	$self->shocktoken || die "no shocktoken defined";
-	if ($self->shocktoken eq '') {
-		die "no shocktoken defined";
-	}
 	
-	$newworkflow->shock_upload($self->shockurl, $self->shocktoken);
 	
-	print "AWE job with input:\n".$json->pretty->encode( $newworkflow->getHash() )."\n";
+	$workflow->shock_upload($self->shockurl, $self->shocktoken);
+	
+	print "AWE job with input:\n".$json->pretty->encode( $workflow->getHash() )."\n";
 
 
 
 
 	print "submit job to AWE server...\n";
-	my $submission_result = $awe->submit_job('json_data' => $json->encode($newworkflow->getHash()));
+	my $submission_result = $awe->submit_job('json_data' => $json->encode($workflow->getHash()));
 
 	my $job_id = $submission_result->{'data'}->{'id'} || die "no job_id found";
 
 
-	#print "result from AWE server:\n".$json->pretty->encode( $submission_result )."\n";
+	print "result from AWE server:\n".$json->pretty->encode( $submission_result )."\n";
 	return $job_id;
-	#return "xxx";
+	
 }
 
 sub status {
