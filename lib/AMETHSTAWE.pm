@@ -158,18 +158,7 @@ sub amethst_main {
 		die "commands_list not defined";
 	}
 	
-	#my $command_list_source
-	#if (ref($commands_list) eq 'SCALAR' ) {
-		# ref to scalar; data in memory
 		
-	#} elsif (ref($commands_list) eq '' ) {
-		# filename; memor in file
-	#}
-	
-	#open(MEMORY, '>', \$var)
-    #or die "Can't open memory file: $!\n";
-	#print MEMORY "foo!\n";
-	
 	
 	my $tasks_array=[];
 	
@@ -322,30 +311,11 @@ sub create_and_submit_workflow {
 
 
 
-	my $task_tmpls;
 
 
 
-	$task_tmpls = decode_json($task_tmpls_json);
-
-	
-	#my $amethst_version = 'amethst';
-	#if (defined($tree)) {
-	#	$amethst_version = 'amethst-tree';
-	#}
 
 
-	my $tasks = [];
-	my $job_input = {};
-
-	#$job_input->{'ABUNDANCE-MATRIX'}->{'data'} = $abundance_matrix;
-	#$job_input->{'GROUPS-LIST'}->{'data'} = $groups_list;
-	#if (defined($tree)) {
-#		$job_input->{'TREE'}->{'data'} = $tree;
-#	}
-	
-	
-	
 	
 	my $newworkflow = new AWE::Workflow(
 		"pipeline"=> "amethst",
@@ -423,24 +393,11 @@ sub create_and_submit_workflow {
 	$newworkflow->shock_upload($self->shockurl, $self->shocktoken);
 	
 	print "AWE job with input:\n".$json->pretty->encode( $newworkflow->getHash() )."\n";
-#exit(0);
 
 
 
-	
-	#upload job input files
-	#print "job_input: ". Dumper(keys(%$job_input))."\n";
-	#$shock->upload_temporary_files($job_input);
 
-
-	# create job with the input defined above
-	#my $workflow = $awe_job->create(%$job_input);#define workflow output
-
-	#print "AWE job ready for submission:\n";
-	#print $json->pretty->encode( $workflow )."\n";
-
-	#exit(0);
-	#print "submit job to AWE server...\n";
+	print "submit job to AWE server...\n";
 	my $submission_result = $awe->submit_job('json_data' => $json->encode($newworkflow->getHash()));
 
 	my $job_id = $submission_result->{'data'}->{'id'} || die "no job_id found";
