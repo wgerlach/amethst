@@ -353,6 +353,10 @@ sub create_and_submit_workflow {
 
 	my $json = JSON->new;
 	print "AWE job without input:\n".$json->pretty->encode( $newworkflow->getHash() )."\n";
+	
+	$newworkflow->shock_upload($shockurl, $shocktoken);
+	
+	print "AWE job with input:\n".$json->pretty->encode( $newworkflow->getHash() )."\n";
 exit(0);
 
 
