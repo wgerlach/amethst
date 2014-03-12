@@ -60,6 +60,7 @@ deploy-service: deploy-cfg
 	chmod +x $(TARGET)/services/$(SERVICE_DIR)/stop_service
 	$(TPAGE) $(TPAGE_ARGS) service/upstart.tt > service/$(SERVICE_NAME).conf
 	chmod +x service/$(SERVICE_NAME).conf
+	rm -rf $(TARGET)/services/$(SERVICE_DIR)/AMETHST/
 	cp -r AMETHST $(TARGET)/services/$(SERVICE_DIR)/
 	echo "done executing deploy-service target"
 
