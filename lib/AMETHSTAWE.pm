@@ -315,24 +315,7 @@ sub create_and_submit_workflow {
 		push (@summary_inputs, new AWE::TaskInput('reference' => $output_reference));
 		
 		
-		#my $new_task = {
-		#	"task_id" => "amethst_".$i,
-		#	"task_template" => $amethst_version,
-		#	"CMDFILE" => ["shock", "[CMDFILE_$i]", $input_filename],
-		#	"ABUNDANCE-MATRIX" => ["shock", "[ABUNDANCE-MATRIX]", $matrix_file],
-		#	"GROUPS-LIST" => ["shock", "[GROUPS-LIST]", $group_file],
-		#	"OUTPUT" => $analysis_filename
-		#};
-		#if ( defined($tree) ) {
-		#	$new_task->{'TREE'} = ["shock", "[TREE]", $tree_file];
-		#}
-		
-		#push (@{$tasks}, $new_task );
-		
-		
-		
-		
-		#$job_input->{'CMDFILE_'.$i}->{'data'} = $pair_file;
+	
 		my $tid = $newworkflow->addTask($newtask);
 		push(@taskids, $tid);
 	}
@@ -343,9 +326,7 @@ sub create_and_submit_workflow {
 	my $newtask = new AWE::Task();
 	
 	$newtask->command('mg-amethst --summary');
-	
 	$newtask->addInput(@summary_inputs);
-	
 	$newworkflow->addTask($newtask);
 	
 		
@@ -354,20 +335,23 @@ sub create_and_submit_workflow {
 	my $json = JSON->new;
 	print "AWE job without input:\n".$json->pretty->encode( $newworkflow->getHash() )."\n";
 	
-	$newworkflow->shock_upload($shockurl, $shocktoken);
 	
-	print "AWE job with input:\n".$json->pretty->encode( $newworkflow->getHash() )."\n";
-exit(0);
-
-
-
 	$shocktoken || die "no shocktoken defined";
 	if ($shocktoken eq '') {
 		die "no shocktoken defined";
 	}
+	
+	$newworkflow->shock_upload($shockurl, $shocktoken);
+	
+	print "AWE job with input:\n".$json->pretty->encode( $newworkflow->getHash() )."\n";
+#exit(0);
+
+
+
+	
 	#upload job input files
 	#print "job_input: ". Dumper(keys(%$job_input))."\n";
-	$shock->upload_temporary_files($job_input);
+	#$shock->upload_temporary_files($job_input);
 
 
 	# create job with the input defined above
@@ -378,14 +362,14 @@ exit(0);
 
 	#exit(0);
 	#print "submit job to AWE server...\n";
-	#my $submission_result = $awe->submit_job('json_data' => $json->encode($workflow));
+	my $submission_result = $awe->submit_job('json_data' => $json->encode($newworkflow->getHash()));
 
-	#my $job_id = $submission_result->{'data'}->{'id'} || die "no job_id found";
+	my $job_id = $submission_result->{'data'}->{'id'} || die "no job_id found";
 
 
 	#print "result from AWE server:\n".$json->pretty->encode( $submission_result )."\n";
-	#return $job_id;
-	return "xxx";
+	return $job_id;
+	#return "xxx";
 }
 
 sub status {
