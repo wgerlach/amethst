@@ -85,7 +85,7 @@ my ($h, $help_text) = &parse_options (
 'only local: (bypasses service)',
 [ 'command_file|f=s', ""],
 [ 'zip_prefix|z=s', ""],
-[ 'summary', "" ]
+[ 'summary', "" ],
 '',
 [ 'local', "", { hidden => 1  }], #deprecated
 [ 'help|h', "", { hidden => 1  }]
