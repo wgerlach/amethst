@@ -140,7 +140,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	
 	
 	
-} elsif ( (defined $h->{'commands'} ) {
+} elsif ( defined($h->{'commands'}) ) {
 	
 	require Bio::KBase::AmethstService::AmethstServiceImpl;
 	
@@ -198,15 +198,15 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 						}
 						
 						$local_data_files->{$file} = 1;
-					}
-				}
-			}
+					} # end if
+				} # end foreach
+			} # end foreach
 			
 			
-		}
+		} # end if
 		
 		
-	}
+	} # end while
 
 	print "files found: ".join(',', keys(%$local_data_files))."\n";
 	
