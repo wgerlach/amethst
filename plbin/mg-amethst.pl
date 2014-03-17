@@ -167,7 +167,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	
 	my $local_data_files = {};
 	
-	open (CMD_SOURCE, '<', $commands_list) or die $!;
+	open (CMD_SOURCE, '<', $commands_list_data) or die $!;
 	while (my $line = <CMD_SOURCE>) {
 		
 		if ($line =~ /^\#job/) {
