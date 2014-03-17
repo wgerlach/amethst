@@ -151,7 +151,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	# slurp all files
 	#my $abundance_matrix_data = read_file( $h->{'matrix'});
 	#my $groups_list_data = read_file( $h->{'groups'});
-	my $commands_list_data = read_file( $h->{'commands'});
+	#my $commands_list_data = read_file( $h->{'commands'});
 	#my $tree_data = undef;
 	#if (defined $h->{'tree'}){
 	#	$tree_data = read_file($h->{'tree'});
@@ -167,7 +167,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	
 	my $local_data_files = {};
 	
-	open (CMD_SOURCE, '<', $commands_list_data) or die $!;
+	open (CMD_SOURCE, '<', $h->{'commands'}) or die $!;
 	while (my $line = <CMD_SOURCE>) {
 		
 		if ($line =~ /^\#job/) {
