@@ -10,7 +10,7 @@ use File::Slurp;
 use Config::Simple;
 use Data::Dumper;
 
-use Basename;
+use File::Basename;
 
 use SHOCK::Client; # needed for download of results from shock
 use USAGEPOD qw(parse_options);
