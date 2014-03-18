@@ -170,8 +170,9 @@ sub process_pair {
 			if (defined $file) {
 				
 				print "found file: $file\n";
-				
-				$used_files->{$file} = $file2shock->{$file} || die "file $file not in file2shock hash";
+				my $node = $file2shock->{$file} || die "file $file not in file2shock hash";
+				print "found node: $node\n";
+				$used_files->{$file} = $node;
 			} # end if
 		} # end foreach
 	} # end foreach
