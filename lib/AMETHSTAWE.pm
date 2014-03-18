@@ -240,8 +240,7 @@ sub create_and_submit_workflow {
 		
 		
 		
-		print "got:\n $pair_file\n $matrix_file, $group_file\n";
-		
+				
 		# define and add input nodes to the task
 		foreach my $filename (keys(%$used_files)) {
 			my $node = $used_files->{$file};
