@@ -194,10 +194,10 @@ sub create_and_submit_workflow {
 	}
 	
 	
-	$self->shocktoken || die "no shocktoken defined"; # required for upload
-	if ($self->shocktoken eq '') {
-		die "no shocktoken defined";
-	}
+	#$self->shocktoken || die "no shocktoken defined"; # required for upload
+	#if ($self->shocktoken eq '') {
+	#	die "no shocktoken defined";
+	#}
 	
 	$self->shockurl || die "error: shockurl not defined";
 	
