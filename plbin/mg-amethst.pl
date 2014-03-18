@@ -122,6 +122,9 @@ if (defined $h->{'token'}) {
 	$shocktoken = $h->{'token'};
 }
 
+if (defined($shocktoken) && $shocktoken eq '') {
+	$shocktoken = undef;
+}
 
 my $job_id = undef;
 if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
