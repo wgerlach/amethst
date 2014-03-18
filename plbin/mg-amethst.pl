@@ -232,6 +232,9 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 
 	unless (defined($shockurl) && $shockurl ne '') {
 		$shockurl = read_shock_url();
+		print "using deploy.cfg shock-server: $shockurl\n";
+	} else {
+		print "using env SHOCK_SERVER_URL: $shockurl\n";
 	}
 
 
