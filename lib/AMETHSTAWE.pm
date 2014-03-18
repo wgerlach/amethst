@@ -96,7 +96,7 @@ sub readConfig {
 			die "shock-server not found in config";
 		}
 	} else {
-		print "NOT read shockurl\n";
+		print "NOT read shockurl, ".$self->{'shockurl'}."\n";
 	}
 	
 	unless (defined $self->{'clientgroup'} && $self->{'clientgroup'} ne '') {
