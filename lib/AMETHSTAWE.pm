@@ -35,7 +35,7 @@ sub new {
 		aweserverurl	=> $ENV{'AWE_SERVER_URL'} ,
 		shockurl		=> $ENV{'SHOCK_SERVER_URL'},
 		clientgroup		=> $ENV{'AWE_CLIENT_GROUP'},
-		shocktoken		=> $h{'shocktoken'} || $ENV{'GLOBUSONLINE'} || $ENV{'KB_AUTH_TOKEN'}
+		shocktoken		=> $h{'shocktoken'}
 	};
 	
 	

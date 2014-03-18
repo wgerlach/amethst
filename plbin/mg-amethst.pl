@@ -169,7 +169,11 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	# slurp
 	my $commands_list_data = read_file( $h->{'commands'});
 	
-	
+	if (defined $shocktoken) {
+		print "use shocktoken\n";
+	} else {
+		print "no shocktoken\n";
+	}
 	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl('shocktoken' => $shocktoken);
 	
 	
