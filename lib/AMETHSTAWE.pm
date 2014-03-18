@@ -104,36 +104,10 @@ sub readConfig {
 }
 
 
-# this is string-only version
-sub amethst_string {
-	my ($self, $abundance_matrix, $groups_list, $commands_list, $tree) = @_;
-	
-	print STDERR "this is sub amethst \n";
-	system("echo huhu > /home/ubuntu/test.log");
-	
-	return $self->amethst(\$abundance_matrix, \$groups_list, \$commands_list, \$tree);
-}
-
-
 # scalars argument are treated as filenames, references to scalars are treated as data in memory
 sub amethst {
-	my ($self, $abundance_matrix, $groups_list, $commands_list, $tree) = @_;
+	my ($self, $commands_list, $file2shock) = @_;
 	
-	
-	if (defined $tree && $tree eq '') {
-		$tree = undef;
-	}
-	
-	unless (defined $abundance_matrix) {
-		die "abundance_matrix not defined";
-	}
-	
-	unless (defined $groups_list) {
-		die "groups_list not defined";
-	}
-	unless (defined $commands_list) {
-		die "commands_list not defined";
-	}
 	
 		
 	
@@ -168,8 +142,8 @@ sub amethst {
 			#print $cmd2."\n";
 			#print $sum_cmd."\n";
 			
-			my @input_files = process_pair($cmd1, $cmd2, $sum_cmd);
-			push(@{$tasks_array}, [$analysis_filename, $pair_file, @input_files]);
+			my $used_files = process_pair($file2shock, $cmd1, $cmd2);
+			push(@{$tasks_array}, [$analysis_filename, $pair_file, $used_files]);
 		
 		}
 	
@@ -178,85 +152,36 @@ sub amethst {
 
 	close(CMD_SOURCE);
 
-	my $am_data;
-	if (ref($abundance_matrix) eq 'SCALAR' ) {
-		$am_data = $$abundance_matrix; # dereference data
-	} elsif (ref($abundance_matrix) eq ''){
-		$am_data = read_file( $abundance_matrix) ; # read data from file
-	}
-
-	my $grp_data;
-	if (ref($groups_list) eq 'SCALAR' ) {
-		$grp_data = $$groups_list;  # dereference data
-	} elsif (ref($groups_list) eq ''){
-		$grp_data = read_file( $groups_list );# read data from file
-	}
-
-	my $tree_data;
-	if (defined $tree) {
-		if (ref($tree) eq 'SCALAR' ) {
-			$tree_data = $$tree;  # dereference data
-		} elsif (ref($tree) eq ''){
-			$tree_data = read_file( $tree );# read data from file
-		}
-	}
-
-	return $self->create_and_submit_workflow($tasks_array, $am_data, $grp_data, $tree_data);
+	return $self->create_and_submit_workflow($tasks_array);
 
 
 }
 
 sub process_pair {
-	my ($self, $cmd1, $cmd2, $sum_cmd) = @_;
+	my ($self, $file2shock, $cmd1, $cmd2) = @_;
 	
 	
-	my ($matrix_file) = $cmd1 =~ /-f\s+(\S+)/;
-	unless (defined $matrix_file) {
-		die;
-	}
-	print "matrix_file: $matrix_file\n";
-	
-	my ($group_file) = $cmd1 =~ /-g\s+(\S+)/;
-	unless (defined $group_file) {
-		die;
-	}
-	print "group_file: $group_file\n";
-	
-	my ($tree_file) = $cmd1 =~ /-a\s+(\S+)/;
-	if (defined $tree_file) {
-		print "tree_file: $tree_file\n";
-	}
+	my $used_files = {};
+	foreach my $cmd (($cmd1, $cmd2)) {
+		foreach my $key (('-f', '-g', '-a', '--data_file', '--groups_list', '--tree')) {
+			my ($file) = $cmd =~ /$key\s+(\S+)/;
+			if (defined $file) {
+				$used_files->{$file} = $file2shock->{$file} || die "file $file not in file2shock hash";
+			} # end if
+		} # end foreach
+	} # end foreach
 	
 	
-	if (-e $matrix_file) {
-		print "found $matrix_file\n";
-	} else {
-		die "$matrix_file not found"
-	}
-	
-	if (-e $group_file) {
-		print "found $group_file\n";
-	} else {
-		die "$group_file not found"
-	}
-	
-	if (defined $tree_file) {
+			
 		
-		if (-e $tree_file) {
-			print "found $tree_file\n";
-		} else {
-			die "$tree_file not found"
-		}
-	}
-	
-	return ($matrix_file, $group_file, $tree_file);
+	return $used_files;
 }
 
 
 
 
 sub create_and_submit_workflow {
-	my ($self, $tasks_array, $abundance_matrix, $groups_list, $tree) = @_;
+	my ($self, $tasks_array) = @_;
 	
 	if (@$tasks_array == 0) {
 		die "error: tasks_array empty";
@@ -268,6 +193,7 @@ sub create_and_submit_workflow {
 		die "no shocktoken defined";
 	}
 	
+	$self->shockurl || die "error: shockurl not defined";
 	
 	
 	############################################
@@ -302,7 +228,7 @@ sub create_and_submit_workflow {
 	for (my $i = 0 ; $i < @$tasks_array ; ++$i) {
 		my $task_array = $tasks_array->[$i];
 		
-		my ($analysis_filename, $pair_file, $matrix_file, $group_file, $tree_file) = @{$task_array};
+		my ($analysis_filename, $pair_file, $used_files) = @{$task_array};
 		
 		
 		my $input_filename = 'command_'.$i.'.txt';
@@ -316,14 +242,13 @@ sub create_and_submit_workflow {
 		
 		print "got:\n $pair_file\n $matrix_file, $group_file\n";
 		
-		
 		# define and add input nodes to the task
-		$newtask->addInput(new AWE::TaskInput('data' => \$pair_file,		'filename' => $input_filename));
-		$newtask->addInput(new AWE::TaskInput('data' => \$abundance_matrix, 'filename' => $matrix_file));
-		$newtask->addInput(new AWE::TaskInput('data' => \$groups_list,		'filename' => $group_file));
-		if (defined($tree)) {
-			$newtask->addInput(new AWE::TaskInput('data' => \$tree, 'filename' => $tree_file));
+		foreach my $filename (keys(%$used_files)) {
+			my $node = $used_files->{$file};
+			$newtask->addInput(new AWE::TaskInput('node' => $node,	'host' => $self->shockurl, 'filename' => $filename));
 		}
+		# alternative: $newtask->addInput(new AWE::TaskInput('data' => \$pair_file,	'filename' => $input_filename));
+
 		
 		# define and add output nodes to the task; return value is a reference that can be used to create an input node for the next task
 		my $output_reference = $newtask->addOutput(new AWE::TaskOutput($analysis_filename, $self->shockurl));
@@ -349,12 +274,11 @@ sub create_and_submit_workflow {
 	
 
 	my $json = JSON->new;
-	print "AWE job without input:\n".$json->pretty->encode( $workflow->getHash() )."\n";
-	
-	
-	
-	
-	$workflow->shock_upload($self->shockurl, $self->shocktoken);
+
+	#print "AWE job without input:\n".$json->pretty->encode( $workflow->getHash() )."\n";
+
+	#not needed
+	#$workflow->shock_upload($self->shockurl, $self->shocktoken);
 	
 	print "AWE job with input:\n".$json->pretty->encode( $workflow->getHash() )."\n";
 

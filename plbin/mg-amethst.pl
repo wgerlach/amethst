@@ -59,6 +59,27 @@ sub find_amethst_bin_dir {
 	return $amethst_bin_dir;
 }
 
+sub read_shock_url {
+	
+	my $conf_file = $ENV{'KB_TOP'}.'/deployment.cfg';
+	unless (-e $conf_file) {
+		die "error: deployment.cfg not found ($conf_file)";
+	}
+	
+	
+	my $cfg_full = Config::Simple->new($conf_file );
+	my $cfg = $cfg_full->param(-block=>'AmethstService');
+	
+	my $shockurl =  $cfg->param('shock-server' );
+	
+	unless (defined($shockurl) && $shockurl ne "") {
+		die "shockurl not found in config";
+	}
+	
+	return $shockurl;
+}
+
+
 ##############################################
 
 my ($h, $help_text) = &parse_options (
@@ -197,7 +218,12 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 							die "error: only files in current directory are allowed";
 						}
 						
-						$local_data_files->{$file} = 1;
+						unless (defined $local_data_files->{$file}) {
+							unless (-e $file) {
+								die "error: file \"$file\" not found";
+							}
+							$local_data_files->{$file} = 1;
+						}
 					} # end if
 				} # end foreach
 			} # end foreach
@@ -208,9 +234,35 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 		
 	} # end while
 
-	print "files found: ".join(',', keys(%$local_data_files))."\n";
-	
-	#$job_id = $amethst_obj->amethst($abundance_matrix_data, $groups_list_data, $commands_list_data, $tree_data);
+	print "files to upload: ".join(',', keys(%$local_data_files))."\n";
+
+
+	unless (defined($shockurl) && $shockurl ne '') {
+		$shockurl = read_shock_url();
+	}
+
+
+
+	my $shock = new SHOCK::Client($shockurl, $shocktoken);
+	unless (defined $shock) {
+		die;
+	}
+
+	my $job_input = {};
+	foreach my $file (keys(%$local_data_files)) {
+		$job_input->{$file}->{'file'} = $file;
+	}
+	$shock->upload_temporary_files($job_input);
+
+	my $file2shock={};
+	foreach my $file (keys(%$local_data_files)) {
+		
+		$file2shock->{$file} = $job_input->{$file}->{'node'} || die "node not defined $file ";
+	}
+
+
+	exit(0);
+	$job_id = $amethst_obj->amethst($commands_list_data, $file2shock);
 	
 	unless (defined $job_id) {
 		$job_id = 'undefined';
@@ -249,22 +301,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	
 	
 	unless (defined($shockurl) && $shockurl ne '') {
-
-		my $conf_file = $ENV{'KB_TOP'}.'/deployment.cfg';
-		unless (-e $conf_file) {
-			die "error: deployment.cfg not found ($conf_file)";
-		}
-		
-		
-		my $cfg_full = Config::Simple->new($conf_file );
-		my $cfg = $cfg_full->param(-block=>'AmethstService');
-		
-		$shockurl =  $cfg->param('shock-server' );
-		
-		unless (defined($shockurl) && $shockurl ne "") {
-			die "shockurl not found in config";
-		}
-		
+		$shockurl = read_shock_url();
 	}
 	
 	
