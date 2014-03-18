@@ -243,7 +243,7 @@ sub create_and_submit_workflow {
 				
 		# define and add input nodes to the task
 		foreach my $filename (keys(%$used_files)) {
-			my $node = $used_files->{$file};
+			my $node = $used_files->{$filename};
 			$newtask->addInput(new AWE::TaskInput('node' => $node,	'host' => $self->shockurl, 'filename' => $filename));
 		}
 		# alternative: $newtask->addInput(new AWE::TaskInput('data' => \$pair_file,	'filename' => $input_filename));
