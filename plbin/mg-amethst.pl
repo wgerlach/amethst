@@ -70,7 +70,7 @@ sub read_shock_url {
 	my $cfg_full = Config::Simple->new($conf_file );
 	my $cfg = $cfg_full->param(-block=>'AmethstService');
 	
-	my $shockurl =  $cfg->param('shock-server' );
+	my $shockurl =  $cfg->{'shock-server'};
 	
 	unless (defined($shockurl) && $shockurl ne "") {
 		die "shockurl not found in config";
