@@ -166,8 +166,6 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	require Bio::KBase::AmethstService::AmethstServiceImpl;
 	
 	
-	$h->{'commands'} || die "no commands file defined";
-	
 	# slurp
 	my $commands_list_data = read_file( $h->{'commands'});
 	
