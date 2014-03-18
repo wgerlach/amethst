@@ -168,6 +168,9 @@ sub process_pair {
 		foreach my $key (('-f', '-g', '-a', '--data_file', '--groups_list', '--tree')) {
 			my ($file) = $cmd =~ /$key\s+(\S+)/;
 			if (defined $file) {
+				
+				print "found file: $file\n";
+				
 				$used_files->{$file} = $file2shock->{$file} || die "file $file not in file2shock hash";
 			} # end if
 		} # end foreach
