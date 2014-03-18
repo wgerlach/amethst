@@ -165,18 +165,12 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	
 	require Bio::KBase::AmethstService::AmethstServiceImpl;
 	
-	#$h->{'matrix'} || die "no matrix file defined";
-	#$h->{'groups'} || die "no groups file defined";
+	
 	$h->{'commands'} || die "no commands file defined";
 	
-	# slurp all files
-	#my $abundance_matrix_data = read_file( $h->{'matrix'});
-	#my $groups_list_data = read_file( $h->{'groups'});
-	#my $commands_list_data = read_file( $h->{'commands'});
-	#my $tree_data = undef;
-	#if (defined $h->{'tree'}){
-	#	$tree_data = read_file($h->{'tree'});
-	#}
+	# slurp
+	my $commands_list_data = read_file( $h->{'commands'});
+	
 	
 	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl('shocktoken' => $shocktoken);
 	
