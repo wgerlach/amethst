@@ -30,6 +30,9 @@ use AWE::TaskOutput;
 sub new {
     my ($class, %h) = @_;
     
+	if (defined($h{'shocktoken'}) && $h{'shocktoken'} eq '') {
+		$h{'shocktoken'} = undef;
+	}
 	
     my $self = {
 		aweserverurl	=> $ENV{'AWE_SERVER_URL'} ,
