@@ -79,7 +79,7 @@ sub readConfig {
 	my $cfg = $cfg_full->param(-block=>'AmethstService');
 	
 	unless (defined $self->{'aweserverurl'} && $self->{'aweserverurl'} ne '') {
-		$self->{'aweserverurl'} =  $cfg->param('awe-server' );
+		$self->{'aweserverurl'} =  $cfg->{'awe-server'};
 		
 		unless (defined($self->{'aweserverurl'}) && $self->{'aweserverurl'} ne "") {
 			die "awe-server not found in config";
@@ -87,7 +87,7 @@ sub readConfig {
 	}
 	
 	unless (defined $self->{'shockurl'} && defined $self->{'shockurl'} ne '') {
-		$self->{'shockurl'} =  $cfg->param('shock-server' );
+		$self->{'shockurl'} =  $cfg->{'shock-server'};
 		
 		unless (defined(defined $self->{'shockurl'}) && defined $self->{'shockurl'} ne "") {
 			die "shock-server not found in config";
@@ -95,7 +95,7 @@ sub readConfig {
 	}
 	
 	unless (defined $self->{'clientgroup'} && $self->{'clientgroup'} ne '') {
-		$self->{'clientgroup'} =  $cfg->param('clientgroup');
+		$self->{'clientgroup'} =  $cfg->{'clientgroup'};
 		
 		unless (defined($self->{'clientgroup'}) && $self->{'clientgroup'} ne "") {
 			die "clientgroup not found in config";
