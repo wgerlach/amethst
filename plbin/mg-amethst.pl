@@ -257,7 +257,9 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	my $file2shock={};
 	foreach my $file (keys(%$local_data_files)) {
 		print "found file: $file\n";
-		$file2shock->{$file} = $job_input->{$file}->{'node'} || die "node not defined $file ";
+		my $node = $job_input->{$file}->{'node'} || die "node not defined $file ";
+		print "found node: $node\n";
+		$file2shock->{$file} = $node;
 	}
 
 	$job_id = $amethst_obj->amethst($commands_list_data, $file2shock);
