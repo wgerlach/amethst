@@ -53,19 +53,19 @@ sub new {
 
 sub aweserverurl {
     my ($self) = @_;
-    return $self->{aweserverurl};
+    return $self->{'aweserverurl'};
 }
 sub shockurl {
     my ($self) = @_;
-    return $self->{shockurl};
+    return $self->{'shockurl'};
 }
 sub clientgroup {
     my ($self) = @_;
-    return $self->{clientgroup};
+    return $self->{'clientgroup'};
 }
 sub shocktoken {
     my ($self) = @_;
-    return $self->{shocktoken};
+    return $self->{'shocktoken'};
 }
 
 sub readConfig {
@@ -81,7 +81,7 @@ sub readConfig {
 	my $cfg = $cfg_full->param(-block=>'AmethstService');
 	
 	unless (defined $self->{'aweserverurl'} && $self->{'aweserverurl'} ne '') {
-		$self->{'aweserverurl'} =  $cfg->{'awe-server'};
+		$self->{'aweserverurl'} = $cfg->{'awe-server'};
 		
 		unless (defined($self->{'aweserverurl'}) && $self->{'aweserverurl'} ne "") {
 			die "awe-server not found in config";
@@ -89,11 +89,14 @@ sub readConfig {
 	}
 	
 	unless (defined $self->{'shockurl'} && defined $self->{'shockurl'} ne '') {
+		print "read shockurl\n";
 		$self->{'shockurl'} =  $cfg->{'shock-server'};
 		
 		unless (defined(defined $self->{'shockurl'}) && defined $self->{'shockurl'} ne "") {
 			die "shock-server not found in config";
 		}
+	} else {
+		print "NOT read shockurl\n";
 	}
 	
 	unless (defined $self->{'clientgroup'} && $self->{'clientgroup'} ne '') {
