@@ -227,7 +227,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 		
 		
 	} # end while
-	open (CMD_SOURCE);
+	close(CMD_SOURCE);
 
 	print "files to upload: ".join(',', keys(%$local_data_files))."\n";
 
