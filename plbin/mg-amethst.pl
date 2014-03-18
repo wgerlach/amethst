@@ -85,7 +85,7 @@ sub read_shock_url {
 my ($h, $help_text) = &parse_options (
 'name' => 'mg-amethst -- wrapper for amethst',
 'version' => '1',
-'synopsis' => 'mg-amethst --commands=<commandsfile>',
+'synopsis' => 'mg-amethst -c <commandsfile>',
 'examples' => 'ls',
 'authors' => 'Wolfgang Gerlach',
 'options' => [
@@ -175,13 +175,13 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	my $amethst_obj = new Bio::KBase::AmethstService::AmethstServiceImpl('shocktoken' => $shocktoken);
 	
 	
-	#my $matrixkey = '-f';
-	#my $groupkey = '-g';
-	#my $treekey = '-a';
+	
 	
 	
 	my $local_data_files = {};
 	
+	
+	# extract filenames
 	open (CMD_SOURCE, '<', $h->{'commands'}) or die $!;
 	while (my $line = <CMD_SOURCE>) {
 		
@@ -227,6 +227,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 		
 		
 	} # end while
+	open (CMD_SOURCE);
 
 	print "files to upload: ".join(',', keys(%$local_data_files))."\n";
 
@@ -242,20 +243,22 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 		die;
 	}
 
+	# define input
 	my $job_input = {};
 	foreach my $file (keys(%$local_data_files)) {
 		$job_input->{$file}->{'file'} = $file;
 	}
+
+	# upload input to SHOCK
 	$shock->upload_temporary_files($job_input);
 
+	# collect SHOCK nodes
 	my $file2shock={};
 	foreach my $file (keys(%$local_data_files)) {
 		
 		$file2shock->{$file} = $job_input->{$file}->{'node'} || die "node not defined $file ";
 	}
 
-
-	exit(0);
 	$job_id = $amethst_obj->amethst($commands_list_data, $file2shock);
 	
 	unless (defined $job_id) {

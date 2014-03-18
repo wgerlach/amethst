@@ -157,6 +157,8 @@ sub amethst {
 
 }
 
+
+# parse filenames form commands_file
 sub process_pair {
 	my ($self, $file2shock, $cmd1, $cmd2) = @_;
 	
