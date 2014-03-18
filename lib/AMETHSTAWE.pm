@@ -142,7 +142,7 @@ sub amethst {
 			#print $cmd2."\n";
 			#print $sum_cmd."\n";
 			
-			my $used_files = process_pair($file2shock, $cmd1, $cmd2);
+			my $used_files = $self->process_pair($file2shock, $cmd1, $cmd2);
 			push(@{$tasks_array}, [$analysis_filename, $pair_file, $used_files]);
 		
 		}
