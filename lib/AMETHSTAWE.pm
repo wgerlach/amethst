@@ -88,15 +88,13 @@ sub readConfig {
 		}
 	}
 	
-	unless (defined $self->{'shockurl'} && defined $self->{'shockurl'} ne '') {
-		print "read shockurl\n";
+	
+	unless (defined $self->{'shockurl'} && $self->{'shockurl'} ne '') {
 		$self->{'shockurl'} =  $cfg->{'shock-server'};
 		
-		unless (defined(defined $self->{'shockurl'}) && defined $self->{'shockurl'} ne "") {
+		unless (defined(defined $self->{'shockurl'}) && $self->{'shockurl'} ne "") {
 			die "shock-server not found in config";
 		}
-	} else {
-		print "NOT read shockurl, ".$self->{'shockurl'}."\n";
 	}
 	
 	unless (defined $self->{'clientgroup'} && $self->{'clientgroup'} ne '') {
