@@ -259,7 +259,7 @@ sub create_and_submit_workflow {
 			my $node = $used_files->{$filename};
 			$newtask->addInput(new AWE::TaskInput('node' => $node,	'host' => $self->shockurl, 'filename' => $filename));
 		}
-		# alternative: $newtask->addInput(new AWE::TaskInput('data' => \$pair_file,	'filename' => $input_filename));
+		$newtask->addInput(new AWE::TaskInput('data' => \$pair_file, 'filename' => $input_filename));
 
 		
 		# define and add output nodes to the task; return value is a reference that can be used to create an input node for the next task
@@ -287,10 +287,10 @@ sub create_and_submit_workflow {
 
 	my $json = JSON->new;
 
-	#print "AWE job without input:\n".$json->pretty->encode( $workflow->getHash() )."\n";
+	print "AWE job without input:\n".$json->pretty->encode( $workflow->getHash() )."\n";
 
-	#not needed
-	#$workflow->shock_upload($self->shockurl, $self->shocktoken);
+	# upload splitted command files
+	$workflow->shock_upload($self->shockurl, $self->shocktoken);
 	
 	print "AWE job with input:\n".$json->pretty->encode( $workflow->getHash() )."\n";
 

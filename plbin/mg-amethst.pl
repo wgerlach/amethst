@@ -128,8 +128,7 @@ if (defined($shocktoken) && $shocktoken eq '') {
 
 my $job_id = undef;
 if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
-	#require AMETHSTAWE;
-	#$job_id = AMETHSTAWE::amethst_main($h->{'matrix'}, $h->{'groups'},$h->{'commands'}, $h->{'tree'});
+	
 	
 	$h->{'command_file'} || die "no command_file defined";
 	$h->{'zip_prefix'} || die "no zip_prefix defined";
