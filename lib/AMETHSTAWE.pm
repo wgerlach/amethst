@@ -45,6 +45,8 @@ sub new {
     
 	$self->readConfig();
 	
+	$self->shockurl || die "error(new): shockurl not defined";
+	
 	return $self;
 }
 
@@ -108,7 +110,8 @@ sub readConfig {
 sub amethst {
 	my ($self, $commands_list, $file2shock) = @_;
 	
-	
+	$self->shockurl || die "error(amethst): shockurl not defined";
+
 		
 	
 	my $tasks_array=[];
