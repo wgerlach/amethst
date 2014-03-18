@@ -256,7 +256,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 	# collect SHOCK nodes
 	my $file2shock={};
 	foreach my $file (keys(%$local_data_files)) {
-		
+		print "found file: $file\n";
 		$file2shock->{$file} = $job_input->{$file}->{'node'} || die "node not defined $file ";
 	}
 
