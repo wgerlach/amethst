@@ -209,10 +209,10 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 			chomp($cmd2);
 			chomp($sum_cmd);
 			foreach my $cmd (($cmd1, $cmd2, $sum_cmd)) {
-				print "parse: $cmd\n";
+				#print "parse: $cmd\n";
 				foreach my $key (('--data_file', '--groups_list', '--tree')) {
 					my @files = $cmd =~ /$key\s+(\S+)/g;
-					print "for key $key I found ".@files." files :".join(',',@files)."\n";
+					#print "for key $key I found ".@files." files :".join(',',@files)."\n";
 					
 					foreach my $file (@files) {
 						
