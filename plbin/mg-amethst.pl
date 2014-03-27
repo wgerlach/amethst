@@ -24,7 +24,7 @@ use USAGEPOD qw(parse_options);
 my $shockurl =  $ENV{'SHOCK_SERVER_URL'};
 #my $clientgroup = $ENV{'AWE_CLIENT_GROUP'};
 
-my $shocktoken=$ENV{'GLOBUSONLINE'} || $ENV{'KB_AUTH_TOKEN'};
+my $shocktoken=$ENV{'KB_AUTH_TOKEN'};
 
 
 ##############################################
