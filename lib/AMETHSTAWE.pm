@@ -173,8 +173,8 @@ sub process_pair {
 	my $used_files = {};
 	foreach my $cmd (($cmd1, $cmd2)) {
 		foreach my $key (('-f', '-g', '-a', '--data_file', '--groups_list', '--tree')) {
-			my ($file) = $cmd =~ /$key\s+(\S+)/;
-			if (defined $file) {
+			my @files = $cmd =~ /$key\s+(\S+)/g;
+			foreach my $file (@files) {
 				
 				print "found file: $file\n";
 				my $node = $file2shock->{$file} || die "file $file not in file2shock hash";

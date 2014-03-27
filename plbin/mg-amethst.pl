@@ -209,7 +209,7 @@ if ((defined $h->{'command_file'}) || (defined $h->{'zip_prefix'}) ) {
 			chomp($sum_cmd);
 			foreach my $cmd (($cmd1, $cmd2)) {
 				foreach my $key (('-f', '-g', '-a', '--data_file', '--groups_list', '--tree')) {
-					my @files = $cmd =~ /$key\s+(\S+)/;
+					my @files = $cmd =~ /$key\s+(\S+)/g;
 					foreach my $file (@files) {
 						
 						if ($file ne basename($file)) {
